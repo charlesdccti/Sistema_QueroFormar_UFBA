@@ -14,10 +14,10 @@
                     Digite seu usuário e senha do SIAC Aluno WEB para ter acesso ao sistema:                    
                     <p:messages id="messagesLogin"/>
                     <br> </br> <br> </br>
-                    <p:inputText placeholder="CPF" value="#{autenticacaoSiacController.login}" size="40" required="true" maxlength="11" requiredMessage="Campo Login é obrigatório"/>
-                    <p:password placeholder="Senha do SIAC" value="#{autenticacaoSiacController.senha}" size="40" required="true" requiredMessage="Campo Senha é obrigatório"/>
+                    <p:inputText placeholder="CPF" value="#{loginController.cpf}" size="40" required="true" maxlength="11" requiredMessage="Campo CPF é obrigatório"/>
+                    <p:password placeholder="Senha do SIAC" value="#{loginController.senha}" size="40" required="true" requiredMessage="Campo Senha é obrigatório"/>
                     <br> </br>
-                    <p:commandButton value="Log In" action="#{autenticacaoSiacController.logIn()}" update="messagesLogin" /> <!-- update="messagesLogin" -->
+                    <p:commandButton value="Log In" action="#{loginController.logIn()}" update="messagesLogin" /> <!-- update="messagesLogin" -->
                 </h:panelGrid>
             </h:form>
         </p:dialog>
