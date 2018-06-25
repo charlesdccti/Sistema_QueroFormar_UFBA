@@ -1,0 +1,25 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>QueroFormar - Página Inicial</title>         
+        <!-- <h:outputStylesheet library="css" name="logincss.css"/>  -->
+    </h:head>
+    <h:body>
+        <p:dialog visible="true" width="400" height="500" header="Acessar o Sistema Quero Formar" showHeader="false" modal="true" resizable="false">            
+            <h:panelGrid style="margin: 0 auto;"><h:outputText styleClass="fa fa-lock fa-5x"/></h:panelGrid>
+            <h:form id="formLogin">
+                <h:panelGrid cellspacing="10">
+                    Digite seu usuário e senha do SIAC Aluno WEB para ter acesso ao sistema:                    
+                    <p:messages id="messagesLogin"/>
+                    <br> </br> <br> </br>
+                    <p:inputText placeholder="CPF" value="#{autenticacaoSiacController.login}" size="40" required="true" maxlength="11" requiredMessage="Campo Login é obrigatório"/>
+                    <p:password placeholder="Senha do SIAC" value="#{autenticacaoSiacController.senha}" size="40" required="true" requiredMessage="Campo Senha é obrigatório"/>
+                    <br> </br>
+                    <p:commandButton value="Log In" action="#{autenticacaoSiacController.logIn()}" update="messagesLogin" /> <!-- update="messagesLogin" -->
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+    </h:body>
+</html>
