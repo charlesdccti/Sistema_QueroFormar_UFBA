@@ -110,9 +110,9 @@ public class AutenticarSiac {
 	   public void openPage(final String url) throws IOException {
 	       final HttpGet get = new HttpGet(url);
 	       final HttpResponse response = client.execute(get);
-	       //saveHTLM(response);
-	       //final HttpResponse response2 = client.execute(get);
-	       extrairHTLM(response);
+	       saveHTLM(response);
+	       final HttpResponse response2 = client.execute(get);
+	       extrairHTLM(response2);
 	   }
 
 	   /**
@@ -146,7 +146,7 @@ public class AutenticarSiac {
 	    * @param response
 	    * @throws IOException 
 	    */
-	   /*private void saveHTLM(final HttpResponse response) throws IOException {
+	   private void saveHTLM(final HttpResponse response) throws IOException {
 	       final BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 	       String line;
 	       File arquivo = new File("C:\\Users\\Danilo\\Desktop\\arquivo.html");
@@ -157,7 +157,7 @@ public class AutenticarSiac {
 	       }        
 	       writer.flush();
 	       writer.close();
-	   }*/
+	   }
 	   
 	    /*
 	     * Extrair Componentes
