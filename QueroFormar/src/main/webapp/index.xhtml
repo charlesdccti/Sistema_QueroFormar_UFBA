@@ -8,9 +8,21 @@
    
     
     <ui:define name="corpo">              
-        <title>Index</title>               
-                    
-          <h1>Corpo da aplicação</h1>
+        <title>Desempenho no Curso</title>
+      	<h:form>
+			<h2>Evolução no Curso</h2>
+			<p:spacer></p:spacer>
+			
+			<h3>Obrigatórias:</h3>
+			<p:spacer></p:spacer>
+			<div class="knob-container ui-corner-all">
+			    <p:knob foregroundColor="blue" backgroundColor="#00000"  labelTemplate="50%" disabled="true" value="loginController.value"/>
+			</div>
+			<h3>Optativas: </h3>
+			<p:spacer></p:spacer>
+			<div class="knob-container ui-corner-all">			    
+			    <p:knob foregroundColor="green" backgroundColor="#00000" labelTemplate="20%" value="20" disabled="true"     />
+			</div>
+    	</h:form>               
     </ui:define>
-
 </ui:composition>
