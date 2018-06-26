@@ -22,6 +22,8 @@ import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import br.ufba.si.entidade.Usuario;
+
 /**
 *
 * @author marcelo
@@ -213,15 +215,41 @@ public class AutenticarSiac {
 	    * @param url - Página a acessar
 	    * @throws IOException 
 	    */
-	   public void extrairDados(final String url) throws IOException {
+	   public void extrairDados(final String url, Usuario user) throws IOException {
 	       final HttpGet get = new HttpGet(url);
 	       final HttpResponse response = client.execute(get);
-	       saveHTLM(response);
-	       final HttpResponse response2 = client.execute(get);
-	       extrairHTLM(response2);
+	       obterNomeMatricula(response, user);
 	   }
 	   
-	   
+	   private static void obterNomeMatricula(final HttpResponse response, Usuario user) throws IOException {
+		   final BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+	       String line;
+	       boolean stop = false;
+	       int inicio, fim;
+	       String matricula = "<tr><td><b>MATRÍCULA:</b>";
+	       String nome = "</td><td><b>NOME:</b> ";
+	             
+	                
+	       /* 
+	        * Obter Matricula e Nome do aluno 
+	        * */
+	       while ((line = rd.readLine()) != null && !stop) {
+	    	   if(line.contains(matricula)) {
+	    		   inicio = line.indexOf(matricula);
+	    		   fim = line.indexOf(nome);
+	    		   //Matricula
+	    		   user.setMatricula(line.substring(inicio+26, fim));
+	    		   
+	    		   inicio = line.indexOf(nome);
+	    		   fim = line.lastIndexOf("</td><td style=\"text-align: center;\">");
+	    		   
+	    		   user.setNome(line.substring(inicio+22, fim));
+	    		   
+	    		   stop = true; 
+	    		              
+	    	   }
+	       }
+	   }
 	   
 	   
 	   /**

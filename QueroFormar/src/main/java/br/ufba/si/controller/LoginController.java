@@ -14,6 +14,7 @@ import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 
 import br.ufba.si.business.AutenticarSiac;
+import br.ufba.si.entidade.Fluxograma;
 import br.ufba.si.entidade.Usuario;
 
 @Named
@@ -41,6 +42,7 @@ public class LoginController implements Serializable {
         this.nome = usuarioLogado.getNome();
         Random rand = new Random();
         value = rand.nextInt(50) + 1;
+        Fluxograma fluxogramaSi = new Fluxograma();
         
     }
 
@@ -57,7 +59,9 @@ public class LoginController implements Serializable {
 			if (autenticou) {
 				 // Acessa página dos componetes curriculares
 				siac.openPage("https://siac.ufba.br/SiacWWW/ConsultarComponentesCurricularesCursados.do");
-				
+				siac.close();
+				siac.extrairDados("https://siac.ufba.br/SiacWWW/ConsultarComponentesCurricularesCursados.do", usuarioLogado);
+				siac.close();
 				return "/index?faces-redirect=true";
 				
 	        } else {       
