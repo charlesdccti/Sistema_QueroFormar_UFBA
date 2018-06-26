@@ -209,6 +209,22 @@ public class AutenticarSiac {
 	   }
 	   
 	   /**
+	    * Extrair Dados do aluno para alicação
+	    * @param url - Página a acessar
+	    * @throws IOException 
+	    */
+	   public void extrairDados(final String url) throws IOException {
+	       final HttpGet get = new HttpGet(url);
+	       final HttpResponse response = client.execute(get);
+	       saveHTLM(response);
+	       final HttpResponse response2 = client.execute(get);
+	       extrairHTLM(response2);
+	   }
+	   
+	   
+	   
+	   
+	   /**
 	    * Roda aplicação
 	    * @param args 
 	    */

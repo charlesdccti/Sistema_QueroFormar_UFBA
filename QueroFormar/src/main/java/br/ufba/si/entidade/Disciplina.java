@@ -1,4 +1,4 @@
-package br.ufba.si.main;
+package br.ufba.si.entidade;
 
 import java.util.ArrayList;
 

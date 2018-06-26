@@ -5,6 +5,8 @@ package br.ufba.si.main;
 
 import java.util.ArrayList;
 
+import br.ufba.si.entidade.Disciplina;
+
 /**
  * @author charles
  *
