@@ -66,8 +66,6 @@ public class LoginController implements Serializable {
 				
 				//Passar usuario para tela de inicial
 				//passarUser();
-								
-				//siac.extrairDados("https://siac.ufba.br/SiacWWW/ConsultarComponentesCurricularesCursados.do", usuarioLogado);
 				
 				return "/inicio?faces-redirect=true";
 				

@@ -150,7 +150,7 @@ public class AutenticarSiac {
 	    * @param response
 	    * @throws IOException 
 	    */
-	   private void saveHTLM(final HttpResponse response) throws IOException {
+	  /* private void saveHTLM(final HttpResponse response) throws IOException {
 	       final BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 	       String line;
 	       File arquivo = new File("C:\\Users\\Danilo\\Desktop\\arquivo.html");
@@ -161,7 +161,7 @@ public class AutenticarSiac {
 	       }        
 	       writer.flush();
 	       writer.close();
-	   }
+	   }*/
 	   
 	    /*
 	     * Extrair Componentes
@@ -175,10 +175,7 @@ public class AutenticarSiac {
 	       int inicio, fim;
 	       String corpoHistorico = "<table class=\"corpoHistorico\" cellspacing=\"0\" cellpadding=\"2\" width=\"95%\">";
 	       String corpoFim = "Subtotal";
-	             
-	       File componente = new File("C:\\Users\\Danilo\\Desktop\\componente.txt");
-	       PrintWriter writer = new PrintWriter(componente);  
-	       
+	                
 	       Disciplina disciplia;
 	         
 	       /* 
@@ -190,22 +187,17 @@ public class AutenticarSiac {
 	    		   inicio = line.indexOf("\">");
 	    		   fim = line.indexOf("</td><td");
 	    		   
-	    		   String materia = line.substring(inicio+2, fim);
 	    		   disciplia.setCodigo(line.substring(inicio+2, fim));
 	    		   
 	    		   fim = line.lastIndexOf("</td><td style=\"text-align: center;\">");
 	    		   inicio = fim - 3;
-	    		   
-	    		   materia = materia+"   "+line.substring(inicio, fim);
-	    		   	    		   
+	    		   	    		   	    		   
 	    		   inicio = line.lastIndexOf("\">");
 	    		   fim = line.indexOf("</td></tr>");
-	    		   materia = materia+"   "+line.substring(inicio+2, fim);
 	    		   
 	    		   disciplia.setResultado(ResultadoEnum.NãoIdentificado.comparaEnum(line.substring(inicio+2, fim)));
 	    		   user.getMateriasCursadas().add(disciplia);
-	    		   
-	    		   writer.println(materia);               
+	    		                
 	           }
 	    	   
 	    	   if(line.contains(corpoHistorico) && !achei) {
@@ -215,23 +207,9 @@ public class AutenticarSiac {
 	           if(line.contains(corpoFim) & achei) {
 	        	   stop = true;                
 	           }
-	           
 	       } 
-	       writer.flush();
-	       writer.close();
 	   }
-	   
-	   /**
-	    * Extrair Dados do aluno para alicação
-	    * @param url - Página a acessar
-	    * @throws IOException 
-	    */
-	   public void extrairDados(final String url, Usuario user) throws IOException {
-	       final HttpGet get = new HttpGet(url);
-	       final HttpResponse response = client.execute(get);
-	       obterNomeMatricula(response, user);
-	   }
-	   
+	      
 	   /* 
         * Obter Matricula e Nome do aluno 
         * */
