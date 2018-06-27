@@ -22,7 +22,9 @@ import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import br.ufba.si.entidade.Disciplina;
 import br.ufba.si.entidade.Usuario;
+import br.ufba.si.utils.ResultadoEnum;
 
 /**
 *
@@ -32,7 +34,7 @@ import br.ufba.si.entidade.Usuario;
 public class AutenticarSiac {
 	
 	private final DefaultHttpClient client = new DefaultHttpClient();
-
+	
 	   /**
 	    * Efetua login no site
 	    * @param url - URL de Login do site
@@ -109,12 +111,12 @@ public class AutenticarSiac {
 	    * @param url - Página a acessar
 	    * @throws IOException 
 	    */
-	   public void openPage(final String url) throws IOException {
+	   public void openPage(final String url, Usuario user) throws IOException {
 	       final HttpGet get = new HttpGet(url);
 	       final HttpResponse response = client.execute(get);
-	       saveHTLM(response);
+	       obterNomeMatricula(response, user);
 	       final HttpResponse response2 = client.execute(get);
-	       extrairHTLM(response2);
+	       extrairHTLM(response2, user);	       
 	   }
 
 	   /**
@@ -165,7 +167,7 @@ public class AutenticarSiac {
 	     * Extrair Componentes
 	     */
 	   
-	   private static void extrairHTLM(final HttpResponse response) throws IOException {
+	   private static void extrairHTLM(final HttpResponse response, Usuario user) throws IOException {
 		   final BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 	       String line;
 	       boolean achei = false;
@@ -175,25 +177,34 @@ public class AutenticarSiac {
 	       String corpoFim = "Subtotal";
 	             
 	       File componente = new File("C:\\Users\\Danilo\\Desktop\\componente.txt");
-	       PrintWriter writer = new PrintWriter(componente);        
+	       PrintWriter writer = new PrintWriter(componente);  
+	       
+	       Disciplina disciplia;
 	         
 	       /* 
 	        * Obtem Todas as materias cursadas pelo aluno 
 	        * */
 	       while ((line = rd.readLine()) != null && !stop) {
 	    	   if(achei && line.contains("</td><td style=\"text-align: left;\">")) {
+	    		   disciplia = new Disciplina();
 	    		   inicio = line.indexOf("\">");
 	    		   fim = line.indexOf("</td><td");
+	    		   
 	    		   String materia = line.substring(inicio+2, fim);
+	    		   disciplia.setCodigo(line.substring(inicio+2, fim));
 	    		   
 	    		   fim = line.lastIndexOf("</td><td style=\"text-align: center;\">");
 	    		   inicio = fim - 3;
 	    		   
 	    		   materia = materia+"   "+line.substring(inicio, fim);
-	    		   
+	    		   	    		   
 	    		   inicio = line.lastIndexOf("\">");
 	    		   fim = line.indexOf("</td></tr>");
 	    		   materia = materia+"   "+line.substring(inicio+2, fim);
+	    		   
+	    		   disciplia.setResultado(ResultadoEnum.NãoIdentificado.comparaEnum(line.substring(inicio+2, fim)));
+	    		   user.getMateriasCursadas().add(disciplia);
+	    		   
 	    		   writer.println(materia);               
 	           }
 	    	   
@@ -221,32 +232,28 @@ public class AutenticarSiac {
 	       obterNomeMatricula(response, user);
 	   }
 	   
+	   /* 
+        * Obter Matricula e Nome do aluno 
+        * */
 	   private static void obterNomeMatricula(final HttpResponse response, Usuario user) throws IOException {
 		   final BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 	       String line;
 	       boolean stop = false;
 	       int inicio, fim;
 	       String matricula = "<tr><td><b>MATRÍCULA:</b>";
-	       String nome = "</td><td><b>NOME:</b> ";
-	             
-	                
-	       /* 
-	        * Obter Matricula e Nome do aluno 
-	        * */
+	       String nome = "</td><td><b>NOME:</b> ";         
+	       
 	       while ((line = rd.readLine()) != null && !stop) {
 	    	   if(line.contains(matricula)) {
 	    		   inicio = line.indexOf(matricula);
 	    		   fim = line.indexOf(nome);
 	    		   //Matricula
-	    		   user.setMatricula(line.substring(inicio+26, fim));
+	    		   user.setMatricula(line.substring(inicio+26, fim).trim());
 	    		   
 	    		   inicio = line.indexOf(nome);
-	    		   fim = line.lastIndexOf("</td><td style=\"text-align: center;\">");
-	    		   
-	    		   user.setNome(line.substring(inicio+22, fim));
-	    		   
-	    		   stop = true; 
-	    		              
+	    		   fim = line.lastIndexOf("</td><td>&nbsp;</td></tr>");
+	    		   //Nome
+	    		   user.setNome(line.substring(inicio+22, fim).trim());	    		              
 	    	   }
 	       }
 	   }
@@ -267,7 +274,7 @@ public class AutenticarSiac {
 	           boolean ok = navegador.login(url, cpf, senha);
 	           if (ok) {
 	               // Acessa página restrita
-	               navegador.openPage("https://siac.ufba.br/SiacWWW/ConsultarComponentesCurricularesCursados.do");
+	               //navegador.openPage("https://siac.ufba.br/SiacWWW/ConsultarComponentesCurricularesCursados.do");
 	           }
 	           navegador.close();
 	          

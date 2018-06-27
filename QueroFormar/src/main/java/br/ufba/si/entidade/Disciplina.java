@@ -2,6 +2,8 @@ package br.ufba.si.entidade;
 
 import java.util.ArrayList;
 
+import br.ufba.si.utils.ResultadoEnum;
+
 /**
  * @author charles
  *
@@ -13,7 +15,7 @@ public class Disciplina {
 	private String nome;
 	private String cargaHoraria;
 	private String natureza;
-	private String resultado;
+	private ResultadoEnum resultado;
 	private String semestre;
 	private ArrayList<String> codPreRequisitosList;
 	private ArrayList<String> codAbertasList;
@@ -24,7 +26,7 @@ public class Disciplina {
 	}
 
 	public Disciplina(String codigo, String nome, String cargaHoraria,
-			String natureza, String resultado, String semestre,
+			String natureza, ResultadoEnum resultado, String semestre,
 			ArrayList<String> codPreRequisitosList,
 			ArrayList<String> codAbertasList) {
 		super();
@@ -78,11 +80,11 @@ public class Disciplina {
 		this.natureza = natureza;
 	}
 
-	public String getResultado() {
+	public ResultadoEnum getResultado() {
 		return resultado;
 	}
 
-	public void setResultado(String resultado) {
+	public void setResultado(ResultadoEnum resultado) {
 		this.resultado = resultado;
 	}
 

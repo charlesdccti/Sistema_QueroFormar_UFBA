@@ -1,6 +1,7 @@
 package br.ufba.si.entidade;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Objects;
 
 import javax.persistence.Entity;
@@ -13,6 +14,7 @@ public class Usuario implements Serializable {
     private String nome;
     private String login;
     private String senha;
+    private ArrayList<Disciplina> MateriasCursadas = new ArrayList<Disciplina>();
     
     
     public Usuario() {
@@ -21,7 +23,6 @@ public class Usuario implements Serializable {
     public Usuario(String login, String senha) {
         this.login = login;
         this.senha = senha;
-        this.nome = "Yuna Tretiakova ";
     }    
 
     public String getMatricula() {
@@ -79,4 +80,12 @@ public class Usuario implements Serializable {
     public String toString() {
         return nome;
     }
+
+	public ArrayList<Disciplina> getMateriasCursadas() {
+		return MateriasCursadas;
+	}
+
+	public void setMateriasCursadas(ArrayList<Disciplina> materiasCursadas) {
+		MateriasCursadas = materiasCursadas;
+	}
 }
