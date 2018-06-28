@@ -10,10 +10,12 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 
 import br.ufba.si.business.AutenticarSiac;
+import br.ufba.si.entidade.Fluxograma;
 import br.ufba.si.entidade.Usuario;
 
 @Named
@@ -27,6 +29,11 @@ public class LoginController implements Serializable {
     /*Remover Depois*/
     private String nome;
     private int value;
+    private String matricula;
+    
+    @Inject
+    InicioController inicioController;
+
    
 
     public LoginController() {
@@ -56,9 +63,12 @@ public class LoginController implements Serializable {
 		
 			if (autenticou) {
 				 // Acessa página dos componetes curriculares
-				siac.openPage("https://siac.ufba.br/SiacWWW/ConsultarComponentesCurricularesCursados.do");
+				siac.openPage("https://siac.ufba.br/SiacWWW/ConsultarComponentesCurricularesCursados.do", usuarioLogado);
 				
-				return "/index?faces-redirect=true";
+				//Passar usuario para tela de inicial
+				//passarUser();
+				
+				return "/inicio?faces-redirect=true";
 				
 	        } else {       
 	            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "CPF ou Senha Inválidos", "Login Inválido"));
@@ -72,6 +82,13 @@ public class LoginController implements Serializable {
 		}
     	return null;
     }
+
+	private void passarUser() {
+		inicioController.getUsuarioLogado().setLogin(usuarioLogado.getLogin());
+		inicioController.getUsuarioLogado().setMatricula(usuarioLogado.getMatricula());
+		inicioController.getUsuarioLogado().setNome(usuarioLogado.getNome());
+		inicioController.getUsuarioLogado().setSenha(usuarioLogado.getSenha());
+	}
 
     public String logOff() {
         FacesContext fc = FacesContext.getCurrentInstance();
@@ -110,5 +127,21 @@ public class LoginController implements Serializable {
 
 	public void setValue(int value) {
 		this.value = value;
+	}
+
+	public Usuario getUsuarioLogado() {
+		return usuarioLogado;
+	}
+
+	public void setUsuarioLogado(Usuario usuarioLogado) {
+		this.usuarioLogado = usuarioLogado;
+	}
+
+	public String getMatricula() {
+		return matricula;
+	}
+
+	public void setMatricula(String matricula) {
+		this.matricula = matricula;
 	}
 }
