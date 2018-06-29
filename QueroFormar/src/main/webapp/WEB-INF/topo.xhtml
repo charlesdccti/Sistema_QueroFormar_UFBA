@@ -7,16 +7,20 @@
     
     <!-- TOPO START -->
     <div id="layout-topbar">
-        <a href="#"><h:graphicImage name="images/logo01.jpg"  library="adamantium-layout" style="height:60px;  margin-top:18px;" /></a>
+        <a href="#"><h:graphicImage name="images/logoBlack01.jpg"  library="adamantium-layout" style="height:60px;  margin-top:18px;" /></a>
+        
+        
         <ul id="top-menu">
             <li>
-                <a><i class="icon-user2"></i> <span><p:outputLabel value="Seja bem vindo: Charles Ferreira"/> </span></a>
+                <a><i class="ui-inputgroup-addon"></i> <span><p:outputLabel value="#{loginController.nome}" /> </span></a>
+                <a><p:outputLabel value="Matrícula:" /><span><p:outputLabel value="#{loginController.nome}" /> </span></a>
+<!-- =======
+                <a><i class="ui-inputgroup-addon"></i> <span><p:outputLabel value="#{inicioController.usuarioLogado.nome}" /> </span></a>
+                <a><p:outputLabel value="Matrícula:" /><span><p:outputLabel value="#{inicioController.usuarioLogado.nome}" /> </span></a>
+                 -->
                 
             </li>
-            <li>
-                <a class="menulink Animated05"><i class="icon-x"></i> <span><p:outputLabel value="Sair do sistema"/></span></a>
-                
-            </li>
+           
         </ul>
     </div>
     <!-- TOPO END -->
