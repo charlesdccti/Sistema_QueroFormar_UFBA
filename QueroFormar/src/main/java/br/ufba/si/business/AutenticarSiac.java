@@ -137,6 +137,7 @@ public class AutenticarSiac {
 	       boolean found = false;
 	       /* Deixa correr todo o laco, mesmo achando a String, para consumir o content */
 	       while ((line = rd.readLine()) != null) {
+
 	           if(line.contains("ALTERAR")) {
 	               found = true;                
 	           }
