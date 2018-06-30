@@ -58,8 +58,6 @@ public class AutenticarSiac {
 	       /* 
 	        * Codifica os parametros.
 	        * 
-	        * Antes do encoder: fulano@email.com
-	        * Depois do enconder: fulano%40email.com
 	        */        
 	       post.setEntity(new UrlEncodedFormEntity(nameValuePairs, Consts.UTF_8));        
 	           
@@ -91,15 +89,15 @@ public class AutenticarSiac {
 	       response = client.execute(get);        
 	        
 	       /*
-	        * Verifica se a String: "Login DevMedia" está presente
+	        * Verifica se a String: "ALUNO(A):" está presente
 	        */
 	       if (checkSuccess(response)) {
 	           System.out.println("Conexao Estabelecida!");
 	           result = true;
 	       } else {
 	           System.out.println("Login não-efetuado!");
-	       }
-
+	       }  
+	       
 	       return result;
 	   }
 
@@ -134,15 +132,17 @@ public class AutenticarSiac {
 	   private boolean checkSuccess(final HttpResponse response) throws IOException {
 	       final BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 	       String line;
-	       boolean found = false;
+	       boolean logado = false;
+	            
 	       /* Deixa correr todo o laco, mesmo achando a String, para consumir o content */
 	       while ((line = rd.readLine()) != null) {
-
-	           if(line.contains("ALTERAR")) {
-	               found = true;                
+ 
+	           if(line.contains("<b>ALUNO(A):</b>")) {
+	               logado = true;                
 	           }
 	       }
-	       return !found;
+	       	       
+	       return logado;
 	   }
 	    
 	   /**
@@ -152,7 +152,6 @@ public class AutenticarSiac {
 	    */
 
 	  /* private void saveHTLM(final HttpResponse response) throws IOException {
->>>>>>> master
 	       final BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 	       String line;
 	       File arquivo = new File("C:\\Users\\Danilo\\Desktop\\arquivo.html");
