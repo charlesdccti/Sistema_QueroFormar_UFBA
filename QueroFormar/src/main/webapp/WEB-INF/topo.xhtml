@@ -11,11 +11,8 @@
         
         
         <ul id="top-menu">
-            <li>
-                <a><i class="ui-inputgroup-addon"></i> <span><p:outputLabel value="#{loginController.nome}" /> </span></a>
-                <a><p:outputLabel value="Matrícula:" /><span><p:outputLabel value="#{loginController.nome}" /> </span></a>               
-            </li>
-           
+            <h:outputLabel for="name" value="#{loginController.usuarioLogado.matricula}  "/> 
+			<h:outputLabel for="name" value=" -  #{loginController.usuarioLogado.nome}"/>           
         </ul>
     </div>
     <!-- TOPO END -->

@@ -13,19 +13,22 @@ public class Disciplina {
 	private Integer id; // caso for pesista em um banco, essa coluna será o auto_increment 
 	private String codigo;
 	private String nome;
-	private String cargaHoraria;
+	private int cargaHoraria;
 	private String natureza;
+	private double nota; 
 	private ResultadoEnum resultado;
 	private String semestre;
 	private ArrayList<String> codPreRequisitosList;
 	private ArrayList<String> codAbertasList;
+	private ArrayList<Disciplina> rreRequisitosList = new ArrayList<Disciplina>();
+    private ArrayList<Disciplina> liberaList = new ArrayList<Disciplina>();
 	
 	
 	public Disciplina() {
 	
 	}
 
-	public Disciplina(String codigo, String nome, String cargaHoraria,
+	public Disciplina(String codigo, String nome, int cargaHoraria,
 			String natureza, ResultadoEnum resultado, String semestre,
 			ArrayList<String> codPreRequisitosList,
 			ArrayList<String> codAbertasList) {
@@ -64,11 +67,11 @@ public class Disciplina {
 		this.nome = nome;
 	}
 
-	public String getCargaHoraria() {
+	public int getCargaHoraria() {
 		return cargaHoraria;
 	}
 
-	public void setCargaHoraria(String cargaHoraria) {
+	public void setCargaHoraria(int cargaHoraria) {
 		this.cargaHoraria = cargaHoraria;
 	}
 
@@ -110,6 +113,14 @@ public class Disciplina {
 
 	public void setSemestre(String semestre) {
 		this.semestre = semestre;
+	}
+
+	public double getNota() {
+		return nota;
+	}
+
+	public void setNota(double nota) {
+		this.nota = nota;
 	}
 	
 	

@@ -10,15 +10,23 @@ import javax.persistence.Entity;
 public class Usuario implements Serializable {
 
    	private static final long serialVersionUID = -7976817809144840921L;
+   	
 	private String matricula;
     private String nome;
     private String login;
     private String senha;
+    private String ultimoSemestreCursado;
     private ArrayList<Disciplina> MateriasCursadas = new ArrayList<Disciplina>();
+    private ArrayList<Disciplina> MateriasAprovadas = new ArrayList<Disciplina>();
 
     
     
     public Usuario() {
+    	this.matricula = "";
+    	this.nome = "";
+    	this.login = "";
+    	this.senha = "";
+    	this.MateriasCursadas = new ArrayList<Disciplina>();
     }
 
     public Usuario(String login, String senha) {
@@ -88,5 +96,21 @@ public class Usuario implements Serializable {
 
 	public void setMateriasCursadas(ArrayList<Disciplina> materiasCursadas) {
 		MateriasCursadas = materiasCursadas;
+	}
+
+	public ArrayList<Disciplina> getMateriasAprovadas() {
+		return MateriasAprovadas;
+	}
+
+	public void setMateriasAprovadas(ArrayList<Disciplina> materiasAprovadas) {
+		MateriasAprovadas = materiasAprovadas;
+	}
+
+	public String getUltimoSemestreCursado() {
+		return ultimoSemestreCursado;
+	}
+
+	public void setUltimoSemestreCursado(String ultimoSemestreCursado) {
+		this.ultimoSemestreCursado = ultimoSemestreCursado;
 	}
 }

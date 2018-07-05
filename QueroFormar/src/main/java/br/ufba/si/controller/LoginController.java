@@ -3,22 +3,26 @@ package br.ufba.si.controller;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Random;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 
 import br.ufba.si.business.AutenticarSiac;
+import br.ufba.si.entidade.Disciplina;
 import br.ufba.si.entidade.Fluxograma;
 import br.ufba.si.entidade.Usuario;
+import br.ufba.si.utils.ResultadoEnum;
 
 @Named
+@ViewScoped
 @ManagedBean(name = "loginController")
 public class LoginController implements Serializable {
 
@@ -31,8 +35,10 @@ public class LoginController implements Serializable {
     private int value;
     private String matricula;
     
-    @Inject
-    InicioController inicioController;
+    private Fluxograma fluxogramaSi;
+    
+    //@EJB
+    //InicioController inicioController = new InicioController();
 
    
 
@@ -48,6 +54,7 @@ public class LoginController implements Serializable {
         this.nome = usuarioLogado.getNome();
         Random rand = new Random();
         value = rand.nextInt(50) + 1;
+        fluxogramaSi = new Fluxograma();
         
     }
 
@@ -68,7 +75,12 @@ public class LoginController implements Serializable {
 				//Passar usuario para tela de inicial
 				//passarUser();
 				
-				return "/inicio?faces-redirect=true";
+				//Carregar lista de Aprovadas.
+				obterMateriasAprovadas();
+				
+				
+				//"/inicio?faces-redirect=false";
+				return "/inicio.xhtml";
 				
 	        } else {       
 	            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "CPF ou Senha Inválidos", "Login Inválido"));
@@ -83,12 +95,35 @@ public class LoginController implements Serializable {
     	return null;
     }
 
-	private void passarUser() {
+	private void obterMateriasAprovadas() {
+		for (Disciplina disciplia : usuarioLogado.getMateriasCursadas()) {
+			if(disciplia.getResultado().equals(ResultadoEnum.Aprovado) || disciplia.getResultado().equals(ResultadoEnum.DispensaUFBA) || disciplia.getResultado().equals(ResultadoEnum.Dispensado)){
+				usuarioLogado.getMateriasAprovadas().add(disciplia);
+			}
+		}
+	}
+
+	/*public void CarregarDisciplinas(ArrayList<Disciplina> user, Fluxograma fluxo) {
+		for (Disciplina fluxoGrama : fluxo.getFluxogramaSI()) {
+			System.out.println(fluxoGrama.getCodigo());
+			for (Disciplina disciplina : user) {
+				if(fluxoGrama.getCodigo().equals(disciplina.getCodigo())){
+					disciplina.setCargaHoraria(fluxoGrama.getCargaHoraria());
+					disciplina.setNome(fluxoGrama.getNome());
+					disciplina.setSemestre(fluxoGrama.getSemestre());
+					disciplina.setNatureza(fluxoGrama.getNatureza());
+				}
+			}
+		}
+	}*/
+	
+	
+	/*private void passarUser() {
 		inicioController.getUsuarioLogado().setLogin(usuarioLogado.getLogin());
 		inicioController.getUsuarioLogado().setMatricula(usuarioLogado.getMatricula());
 		inicioController.getUsuarioLogado().setNome(usuarioLogado.getNome());
 		inicioController.getUsuarioLogado().setSenha(usuarioLogado.getSenha());
-	}
+	}*/
 
     public String logOff() {
         FacesContext fc = FacesContext.getCurrentInstance();
@@ -143,5 +178,13 @@ public class LoginController implements Serializable {
 
 	public void setMatricula(String matricula) {
 		this.matricula = matricula;
+	}
+
+	public Fluxograma getFluxogramaSi() {
+		return fluxogramaSi;
+	}
+
+	public void setFluxogramaSi(Fluxograma fluxogramaSi) {
+		this.fluxogramaSi = fluxogramaSi;
 	}
 }

@@ -180,30 +180,70 @@ public class AutenticarSiac {
 	       String corpoHistorico = "<table class=\"corpoHistorico\" cellspacing=\"0\" cellpadding=\"2\" width=\"95%\">";
 	       String corpoFim = "Subtotal";
 	                
-	       Disciplina disciplia;
-	         
+	       Disciplina disciplina;
+	       double nota; 
+	       String natureza = "";
 	       /* 
 	        * Obtem Todas as materias cursadas pelo aluno 
 	        * */
 	       while ((line = rd.readLine()) != null && !stop) {
 	    	   if(achei && line.contains("</td><td style=\"text-align: left;\">")) {
 
-	    		   disciplia = new Disciplina();
+	    		   disciplina = new Disciplina();
+	    		   natureza = "";
+	    		   
+	    		   //Obter Codigo Materia
 	    		   inicio = line.indexOf("\">");
 	    		   fim = line.indexOf("</td><td");
 	    		   
-	    		   disciplia.setCodigo(line.substring(inicio+2, fim));
+	    		   disciplina.setCodigo(line.substring(inicio+2, fim));
 	    		   
+	    		   //Obter Nome
+	    		   inicio = line.lastIndexOf("</td><td style=\"text-align: left;\">");
+	    		   fim = line.indexOf("</td><td style=\"text-align: center;\">");
+	    		   
+	    		   disciplina.setNome(line.substring(inicio+35, fim).trim());
+	    		   
+	    		   //Obter CH
+	    		   inicio = line.indexOf("</td><td style=\"text-align: center;\">");
+	    		   fim = inicio+39;
+	    		   
+	    		   if(!"--".equals(line.substring(inicio+37, fim))){
+	    			   Integer cargaHoraria = Integer.parseInt(line.substring(inicio+37, fim).trim());
+		    		   disciplina.setCargaHoraria(cargaHoraria); 
+	    		   }
+	    		   
+	    		   
+	    		   //Obter Nota
 	    		   fim = line.lastIndexOf("</td><td style=\"text-align: center;\">");
 	    		   inicio = fim - 3;
-	    		   	    		   	    		   
+	    		  
+	    		   if(!">--".equals(line.substring(inicio, fim))){
+	    			   disciplina.setNota(Double.parseDouble(line.substring(inicio, fim))); 
+	    		   }
+	    		   
+	    		   //Obter Natureza
+	    		   inicio = line.indexOf("center;\">O");
+	    		   fim = inicio+11;
+	    		   String nat = line.substring(inicio+9, fim);
+	    		   
+	    		   if("OB".equals(nat)){
+	    			   disciplina.setNatureza("Obrigatória");
+	    		   }else if("OP".equals(nat)){
+	    			   disciplina.setNatureza("Optativa");
+	    		   }
+	    		   
+	    		   //Obter NResultado	    		   	    		   
 	    		   inicio = line.lastIndexOf("\">");
 	    		   fim = line.indexOf("</td></tr>");
 	    		   
-	    		   disciplia.setResultado(ResultadoEnum.NãoIdentificado.comparaEnum(line.substring(inicio+2, fim)));
-	    		   user.getMateriasCursadas().add(disciplia);
-	    		                
-
+	    		   disciplina.setResultado(ResultadoEnum.NãoIdentificado.comparaEnum(line.substring(inicio+2, fim)));
+	    		   user.getMateriasCursadas().add(disciplina);
+	           }else if(achei && line.contains("<td style=\"text-align: left;\"><b>")) {
+	        	 //Obter Último Semestre Cursado
+	    		   inicio = line.indexOf("<b>");
+	    		   fim = line.indexOf("</b></td>");
+	    		   user.setUltimoSemestreCursado(line.substring(inicio+3, fim));
 	           }
 	    	   
 	    	   if(line.contains(corpoHistorico) && !achei) {
