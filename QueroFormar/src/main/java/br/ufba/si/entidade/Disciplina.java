@@ -22,7 +22,10 @@ public class Disciplina {
 	private ArrayList<String> codAbertasList;
 	private ArrayList<Disciplina> rreRequisitosList = new ArrayList<Disciplina>();
     private ArrayList<Disciplina> liberaList = new ArrayList<Disciplina>();
-	
+    // Nossa heuristica é o "peso" = tamanho da cadeia mais longa
+    private Integer peso;
+    
+    
 	
 	public Disciplina() {
 	
@@ -121,6 +124,14 @@ public class Disciplina {
 
 	public void setNota(double nota) {
 		this.nota = nota;
+	}
+
+	public Integer getPeso() {
+		return peso;
+	}
+
+	public void setPeso(Integer peso) {
+		this.peso = peso;
 	}
 	
 	

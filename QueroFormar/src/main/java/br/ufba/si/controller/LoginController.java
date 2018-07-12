@@ -36,6 +36,7 @@ public class LoginController implements Serializable {
     private String matricula;
     
     private Fluxograma fluxogramaSi;
+    private ArrayList<Disciplina> disciplinaSugeridaList = new ArrayList<Disciplina>();
     
     //@EJB
     //InicioController inicioController = new InicioController();
@@ -78,6 +79,10 @@ public class LoginController implements Serializable {
 				//Carregar lista de Aprovadas.
 				obterMateriasAprovadas();
 				
+				// Se o alunos tem diciplinas aprovadas, entao será removido do fluxogramaSI para aplicar a busca gulosa 
+				// somente nas disciplinas que podem ser sugeridas
+				
+				
 				
 				//"/inicio?faces-redirect=false";
 				return "/inicio.xhtml";
@@ -102,6 +107,51 @@ public class LoginController implements Serializable {
 			}
 		}
 	}
+	
+	
+	private void removeAprovadasEmFluxograma() {
+		//double notaAprovacao = 5;
+		for (Disciplina materia : fluxogramaSi.getFluxogramaSI()) {
+			for (Disciplina materiaAprovada  : usuarioLogado.getMateriasAprovadas()) {
+				
+				if( materia.getCodigo().equals(materiaAprovada.getCodigo())){
+					
+					fluxogramaSi.getFluxogramaSI().remove(materia);
+					//usuarioLogado.getMateriasAprovadas().add(materia);
+				}
+			}
+				
+		}
+		
+		this.buscaGulosa(fluxogramaSi);
+		
+	}
+	
+	private void buscaGulosa(Fluxograma fluxograma) {
+		
+		Disciplina materiaMaiorPrioridade = fluxograma.getFluxogramaSI().get(1);
+		
+		if(fluxograma.getFluxogramaSI().isEmpty()){
+			for (Disciplina materia : fluxograma.getFluxogramaSI()) {
+				
+				for (int i = 0; i < fluxograma.getFluxogramaSI().size(); i++) {	
+					if(materia.getPeso() > materiaMaiorPrioridade.getPeso()){
+						//atualiza a matria de maior prioridade
+						materiaMaiorPrioridade = materia;
+					}	
+				}
+				
+			}
+			
+			// adiciona na lista de sugeridas e remove do fluxograma
+			this.disciplinaSugeridaList.add(materiaMaiorPrioridade);
+			fluxograma.getFluxogramaSI().remove(materiaMaiorPrioridade);
+			
+			buscaGulosa(fluxograma);
+			
+		}
+	}
+	
 
 	/*public void CarregarDisciplinas(ArrayList<Disciplina> user, Fluxograma fluxo) {
 		for (Disciplina fluxoGrama : fluxo.getFluxogramaSI()) {
