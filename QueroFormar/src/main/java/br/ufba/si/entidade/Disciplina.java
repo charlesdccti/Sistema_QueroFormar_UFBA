@@ -20,8 +20,9 @@ public class Disciplina {
 	private String semestre;
 	private ArrayList<String> codPreRequisitosList;
 	private ArrayList<String> codAbertasList;
-	private ArrayList<Disciplina> rreRequisitosList = new ArrayList<Disciplina>();
+	private ArrayList<Disciplina> requisitosList = new ArrayList<Disciplina>();
     private ArrayList<Disciplina> liberaList = new ArrayList<Disciplina>();
+    private double maiorCadeiaFluxograma;
 	
 	
 	public Disciplina() {
@@ -121,6 +122,30 @@ public class Disciplina {
 
 	public void setNota(double nota) {
 		this.nota = nota;
+	}
+
+	public ArrayList<Disciplina> getRequisitosList() {
+		return requisitosList;
+	}
+
+	public void setRequisitosList(ArrayList<Disciplina> requisitosList) {
+		this.requisitosList = requisitosList;
+	}
+
+	public ArrayList<Disciplina> getLiberaList() {
+		return liberaList;
+	}
+
+	public void setLiberaList(ArrayList<Disciplina> liberaList) {
+		this.liberaList = liberaList;
+	}
+
+	public double getMaiorCadeiaFluxograma() {
+		return maiorCadeiaFluxograma;
+	}
+
+	public void setMaiorCadeiaFluxograma(double maiorCadeiaFluxograma) {
+		this.maiorCadeiaFluxograma = maiorCadeiaFluxograma;
 	}
 	
 	

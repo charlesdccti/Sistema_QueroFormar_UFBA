@@ -78,6 +78,13 @@ public class LoginController implements Serializable {
 				//Carregar lista de Aprovadas.
 				obterMateriasAprovadas();
 				
+				//Criar Lista de Pre Requisito
+				fluxogramaSi.popularListaRequesitos(fluxogramaSi.getFluxogramaSI());
+				
+				//Criar Lista de Materias Liberadas
+				fluxogramaSi.popularListaMateriasLiberadas(fluxogramaSi.getFluxogramaSI());
+				
+				
 				
 				//"/inicio?faces-redirect=false";
 				return "/inicio.xhtml";

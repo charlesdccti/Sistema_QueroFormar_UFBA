@@ -20,7 +20,7 @@ public class Main {
 	public static void main(String[] args) {
 		
 		//(String codigo, String nome, String cargaHoraria, String natureza, ResultadoEnum resultado, String semestre, ArrayList<String> codPreRequisitosList, ArrayList<String> codAbertasList)
-		
+		//(String codigo, String nome, int cargaHoraria, String natureza, ResultadoEnum resultado, String semestre, ArrayList<String> codPreRequisitosList, ArrayList<String> codAbertasList);
 		Disciplina MATA68 = new Disciplina( "MATA68", "COMPUTADOR, ÉTICA E SOCIEDADE", "51h", "Obrigatória", null, "1", null, null);
 		
 		Disciplina MATA37 = new Disciplina( "MATA37", "INTRODUÇÃO À LÓGICA DE PROGRAMAÇÃO", "68h", "Obrigatória", null,"1", null,  new ArrayList<String>(){

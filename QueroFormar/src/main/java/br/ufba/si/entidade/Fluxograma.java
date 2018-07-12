@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import javax.persistence.Entity;
 
+import br.ufba.si.utils.ResultadoEnum;
+
 @Entity
 public class Fluxograma implements Serializable {
 
@@ -16,7 +18,7 @@ public class Fluxograma implements Serializable {
 		fluxogramaSI = new ArrayList<Disciplina>();
 
 		/*1º SEMESTRE*/
-				
+		//(codigo, nome, cargaHoraria, natureza, resultado, semestre, codPreRequisitosList, codAbertasList)		
 		Disciplina MATA68 = new Disciplina( "MATA68", "COMPUTADOR, ÉTICA E SOCIEDADE", 51, "Obrigatória", null, "1", null, null);
 		
 		fluxogramaSI.add(MATA68);
@@ -247,6 +249,51 @@ public class Fluxograma implements Serializable {
 		this.fluxogramaSI = fluxogramaSI;
 	}
 	
+	public void popularListaRequesitos(ArrayList<Disciplina> fluxogramaSI){
+		for (Disciplina disciplina : fluxogramaSI) {
+			if(disciplina.getCodPreRequisitosList() != null && disciplina.getCodPreRequisitosList().size() > 0){
+				for (String nomeMateria : disciplina.getCodPreRequisitosList()) {
+					for (Disciplina preRequisito : fluxogramaSI) {
+						if(nomeMateria.equals(preRequisito.getCodigo())){
+							disciplina.getRequisitosList().add(preRequisito);
+						}
+					}
+				}
+			}
+		}
+	}
 	
-
+	public void popularListaMateriasLiberadas(ArrayList<Disciplina> fluxogramaSI){
+		for (Disciplina disciplina : fluxogramaSI) {
+			if(disciplina.getCodAbertasList() != null && disciplina.getCodAbertasList().size() > 0){
+				for (String nomeMateria : disciplina.getCodAbertasList()) {
+					for (Disciplina materiaLiberada : fluxogramaSI) {
+						if(nomeMateria.equals(materiaLiberada.getCodigo())){
+							disciplina.getLiberaList().add(materiaLiberada);
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	public void obterTamanhoCadeiaFluxograma(ArrayList<Disciplina> fluxogramaSI){
+		double tamanho = 0.0;
+		for (Disciplina disciplina : fluxogramaSI) {
+			if(disciplina.getLiberaList() != null && disciplina.getLiberaList().size() > 0){				
+				
+				
+			}else{
+				tamanho = 1;
+			}
+			
+			disciplina.setMaiorCadeiaFluxograma(tamanho);
+		}
+	}
+	
+	private double contarCadeiaFluxograma(ArrayList<Disciplina> fluxogramaSI){
+		
+	}
+	
+	
 }
