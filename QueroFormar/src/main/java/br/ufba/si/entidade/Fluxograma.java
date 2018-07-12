@@ -24,16 +24,19 @@ public class Fluxograma implements Serializable {
 		Disciplina MATA37 = new Disciplina( "MATA37", "INTRODUÇÃO À LÓGICA DE PROGRAMAÇÃO", 68, "Obrigatória", null, "1", null, new ArrayList<String>(){{add("MATA76");
 					add("MATD04");}});
 		
+		MATA37.setPeso(6);
 		fluxogramaSI.add(MATA37);
 		
 		Disciplina MATA42 = new Disciplina( "MATA42", "MATEMÁTICA DISCRETA I", 68, "Obrigatória", null, "1", null, new ArrayList<String>(){{add("MATC73");
 					add("MATD04");
 					add("MATC94");}});
 	
+		MATA42.setPeso(6);
 		fluxogramaSI.add(MATA42);
 		
 		Disciplina MATA02 = new Disciplina( "MATA02", "CÁLCULO A", 102, "Obrigatória", null, "1", null, new ArrayList<String>(){{add("MAT236");}});
 		
+		MATA02.setPeso(5);
 		fluxogramaSI.add(MATA02);
 		
 		Disciplina MATA39 = new Disciplina( "MATA39", "SEMINÁRIOS DE INTRODUÇÃO AO CURSO", 51, "Obrigatória", null, "1", null, null);
@@ -45,6 +48,7 @@ public class Fluxograma implements Serializable {
 		Disciplina MATC90 = new Disciplina( "MATC90", "CIRCUITOS DIGITAIS E ARQUITETURA DE COMPUTADORES", 68, "Obrigatória", null, "2", null, new ArrayList<String>(){{add("MATA58");
 					add("MATA59");}});
 
+		MATC90.setPeso(2);
 		fluxogramaSI.add(MATC90);
 		
 		Disciplina MATD04 = new Disciplina( "MATD04", "ESTRUTURAS DE DADOS", 68, "Obrigatória", null, "2", new ArrayList<String>(){{add("MATA37"); 
@@ -89,6 +93,7 @@ public class Fluxograma implements Serializable {
 		Disciplina MATA07 = new Disciplina( "MATA07", "ÁLGEBRA LINEAR A", 68, "Obrigatória", null, "3", null, new ArrayList<String>(){{add("MAT236");
 		add("MATC99");}}  );
 		
+		MATA07.setPeso(4);
 		fluxogramaSI.add(MATA07);
 		
 		Disciplina ADM001 = new Disciplina( "ADM001", "INTRODUCAO À ADMINISTRACAO", 68, "Obrigatória", null, "3", null, new ArrayList<String>(){{add("ADM211");}}  );

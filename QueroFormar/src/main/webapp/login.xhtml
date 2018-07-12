@@ -1,25 +1,44 @@
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
-    <h:head>
-        <title>QueroFormar - Página Inicial</title>         
-        <!-- <h:outputStylesheet library="css" name="logincss.css"/>  -->
-    </h:head>
-    <h:body>
-        <p:dialog visible="true" width="400" height="500" header="Acessar o Sistema Quero Formar" showHeader="false" modal="true" resizable="false">            
-            <h:panelGrid style="margin: 0 auto;"><h:outputText styleClass="fa fa-lock fa-5x"/></h:panelGrid>
-            <h:form id="formLogin">
-                <h:panelGrid cellspacing="10">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/templateMenu.xhtml">
+
+
+
+	<ui:define name="corpo">
+		<br /><br />
+		<br /><br />
+		<br /><br />
+		<h:head>
+			<title>QueroFormar - Página Inicial</title>
+			<!-- <h:outputStylesheet library="css" name="logincss.css"/>  -->
+		</h:head>
+		<h:body>
+		<center>
+			<p:panel visible="true" id="boundaries" style="width:400px;height:500px;"
+				header="Acessar o Sistema Quero Formar" showHeader="true" 
+				modal="true" resizable="false">
+				<h:panelGrid style="margin: 0 auto;">
+					<h:outputText styleClass="fa fa-lock fa-5x" />
+				</h:panelGrid>
+				<h:form id="formLogin">
+					<h:panelGrid cellspacing="10">
                     Digite seu usuário e senha do SIAC Aluno WEB para ter acesso ao sistema:                    
-                    <p:messages id="messagesLogin"/>
-                    <br> </br> <br> </br>
-                    <p:inputText placeholder="CPF" value="#{loginController.cpf}" size="40" required="true" maxlength="11" requiredMessage="Campo CPF é obrigatório"/>
-                    <p:password placeholder="Senha do SIAC" value="#{loginController.senha}" size="40" required="true" requiredMessage="Campo Senha é obrigatório"/>
-                    <br> </br>
-                    <p:commandButton value="Log In" action="#{loginController.logIn()}" update="messagesLogin" /> <!-- update="messagesLogin" -->
-                </h:panelGrid>
-            </h:form>
-        </p:dialog>
-    </h:body>
-</html>
+                    <p:messages id="messagesLogin" />
+						<br> </br>
+						<p:inputText placeholder="CPF" value="#{loginController.cpf}" size="40" required="true" maxlength="11" requiredMessage="Campo CPF é obrigatório"/>
+                    	<p:password placeholder="Senha do SIAC" value="#{loginController.senha}" size="40" required="true" requiredMessage="Campo Senha é obrigatório"/>
+                    	
+						<br> </br>
+						<p:commandButton value="Log In"
+							action="#{loginController.logIn()}" update="messagesLogin" />
+						<!-- update="messagesLogin" -->
+					</h:panelGrid>
+				</h:form>
+			</p:panel>
+			<p:resizable for="boundaries" minWidth="200" maxWidth="400" minHeight="400" maxHeight="600" />
+			</center>
+		</h:body>
+	</ui:define>
+</ui:composition>

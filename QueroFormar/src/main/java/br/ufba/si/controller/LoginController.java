@@ -37,6 +37,9 @@ public class LoginController implements Serializable {
     
     private Fluxograma fluxogramaSi;
     private ArrayList<Disciplina> disciplinaSugeridaList = new ArrayList<Disciplina>();
+	
+    //component do prami
+    private int currentLevel = 1;  
     
     //@EJB
     //InicioController inicioController = new InicioController();
@@ -81,7 +84,12 @@ public class LoginController implements Serializable {
 				
 				// Se o alunos tem diciplinas aprovadas, entao será removido do fluxogramaSI para aplicar a busca gulosa 
 				// somente nas disciplinas que podem ser sugeridas
+				this.removeAprovadasEmFluxograma(fluxogramaSi);
 				
+				// Adiciona as disciplinas ordenado por prioridade na lista de disciplinas sugeridas.
+				for(; fluxogramaSi != null && fluxogramaSi.getFluxogramaSI().size() > 0 ;)
+					fluxogramaSi = this.buscaGulosa(fluxogramaSi);
+
 				
 				
 				//"/inicio?faces-redirect=false";
@@ -100,58 +108,110 @@ public class LoginController implements Serializable {
     	return null;
     }
 
-	private void obterMateriasAprovadas() {
-		for (Disciplina disciplia : usuarioLogado.getMateriasCursadas()) {
-			if(disciplia.getResultado().equals(ResultadoEnum.Aprovado) || disciplia.getResultado().equals(ResultadoEnum.DispensaUFBA) || disciplia.getResultado().equals(ResultadoEnum.Dispensado)){
-				usuarioLogado.getMateriasAprovadas().add(disciplia);
+
+//	private void obterMateriasAprovadas() {
+//		for (Disciplina disciplia : usuarioLogado.getMateriasCursadas()) {
+//			if(disciplia.getResultado().equals(ResultadoEnum.Aprovado) || disciplia.getResultado().equals(ResultadoEnum.DispensaUFBA) || disciplia.getResultado().equals(ResultadoEnum.Dispensado)){
+//				usuarioLogado.getMateriasAprovadas().add(disciplia);
+//			}
+//		}
+//	}
+    
+    private void obterMateriasAprovadas() {
+    	int qtd = 0;
+    	
+    	for (int i = 0; qtd < 4 && i < fluxogramaSi.getFluxogramaSI().size(); i++) {
+    		Disciplina disciplia = fluxogramaSi.getFluxogramaSI().get(i);
+
+    		usuarioLogado.getMateriasAprovadas().add(disciplia);
+    		qtd++;
+    		
+    	}
+    }
+	
+	private void removeAprovadasEmFluxograma(Fluxograma fluxograma) {
+		
+		for (Disciplina materia : usuarioLogado.getMateriasAprovadas()){
+			
+			if( fluxogramaSi.getFluxogramaSI().contains(materia)){
+	
+				//materia.setAtivo(0);
+				fluxogramaSi.getFluxogramaSI().remove(materia);
 			}
 		}
-	}
-	
-	
-	private void removeAprovadasEmFluxograma() {
-		//double notaAprovacao = 5;
-		for (Disciplina materia : fluxogramaSi.getFluxogramaSI()) {
-			for (Disciplina materiaAprovada  : usuarioLogado.getMateriasAprovadas()) {
-				
-				if( materia.getCodigo().equals(materiaAprovada.getCodigo())){
-					
-					fluxogramaSi.getFluxogramaSI().remove(materia);
-					//usuarioLogado.getMateriasAprovadas().add(materia);
-				}
-			}
-				
-		}
 		
-		this.buscaGulosa(fluxogramaSi);
+		//this.buscaGulosa(fluxogramaSi);
 		
 	}
+    
+    
+//	
+//	private void removeAprovadasEmFluxograma(Fluxograma fluxograma) {
+//		//double notaAprovacao = 5;
+//		//ArrayList<Disciplina> posiçoesre;
+//		Integer qtd = 0;
+//		
+////		for (int i = 0; i < fluxograma.getFluxogramaSI().size(); i++) {			
+////			Disciplina materia = fluxograma.getFluxogramaSI().get(i);
+//		
+//		for (Disciplina materia : fluxograma.getFluxogramaSI()){
+//
+////			if( materia != null ) {
+////				for (Disciplina materiaAprovada :  usuarioLogado.getMateriasAprovadas()){
+////					
+////					if( materia.getAtivo() != 0 || materia.getCodigo().isEmpty() != true && materia.getCodigo() != null )
+//						
+//						
+////
+////						if(materiaAprovada.getCodigo() != null && materiaAprovada.getCodigo().isEmpty() != true)
+//							
+//							//System.out.println(materiaAprovada.getCodigo()+" == "+ materiaAprovada.getCodigo());
+////							System.out.println(qtd);
+////							qtd++;
+////							if( materia.getCodigo().contains(materiaAprovada.getCodigo()) || materiaAprovada.getCodigo().contains(materia.getCodigo())){
+////	
+////								materia.setAtivo(0);
+////								break;
+////							}
+////				}
+////			}
+////
+//		}
+//
+//		this.buscaGulosa(fluxogramaSi);
+//
+//	}
 	
-	private void buscaGulosa(Fluxograma fluxograma) {
-		
-		Disciplina materiaMaiorPrioridade = fluxograma.getFluxogramaSI().get(1);
-		
-		if(fluxograma.getFluxogramaSI().isEmpty()){
+	private Fluxograma buscaGulosa(Fluxograma fluxograma) {
+
+		if(fluxograma.getFluxogramaSI().isEmpty() != true){
+			
+			Disciplina materiaMaiorPrioridade = new Disciplina();
+			materiaMaiorPrioridade.setPeso(0); 
+
 			for (Disciplina materia : fluxograma.getFluxogramaSI()) {
-				
-				for (int i = 0; i < fluxograma.getFluxogramaSI().size(); i++) {	
-					if(materia.getPeso() > materiaMaiorPrioridade.getPeso()){
-						//atualiza a matria de maior prioridade
-						materiaMaiorPrioridade = materia;
-					}	
-				}
-				
+				System.out.println(materia.getNome());
+				System.out.println(materia.getPeso());
+				if(materia.getPeso()!= null && materia.getPeso() > materiaMaiorPrioridade.getPeso()){
+					//atualiza a matria de maior prioridade
+					materiaMaiorPrioridade = materia;
+				}	
+
 			}
-			
-			// adiciona na lista de sugeridas e remove do fluxograma
-			this.disciplinaSugeridaList.add(materiaMaiorPrioridade);
-			fluxograma.getFluxogramaSI().remove(materiaMaiorPrioridade);
-			
-			buscaGulosa(fluxograma);
-			
+
+			if(materiaMaiorPrioridade.getPeso() != 0){
+				
+				//  remove do fluxograma
+				fluxograma.getFluxogramaSI().remove(materiaMaiorPrioridade);
+				// adiciona na lista de sugeridas e
+				this.disciplinaSugeridaList.add(materiaMaiorPrioridade);
+			}else 
+				fluxograma = null;
 		}
+		
+		return fluxograma;
 	}
-	
+
 
 	/*public void CarregarDisciplinas(ArrayList<Disciplina> user, Fluxograma fluxo) {
 		for (Disciplina fluxoGrama : fluxo.getFluxogramaSI()) {
@@ -181,6 +241,30 @@ public class LoginController implements Serializable {
         session.invalidate();
         return "/login?faces-redirect=true";
     }
+    
+	public String listaDiscipliasFluxograma() {
+		
+		if(fluxogramaSi.getFluxogramaSI().size() < 45)
+			fluxogramaSi = new Fluxograma();
+		
+		return "fluxogramaSI.xhtml";
+	}
+	
+	public String listaDiscipliasSugeridas() {
+		
+		if(fluxogramaSi.getFluxogramaSI().size() < 45)
+			fluxogramaSi = new Fluxograma();
+		
+		// Se o alunos tem diciplinas aprovadas, entao será removido do fluxogramaSI para aplicar a busca gulosa 
+		// somente nas disciplinas que podem ser sugeridas
+		this.removeAprovadasEmFluxograma(fluxogramaSi);
+		
+		// Adiciona as disciplinas ordenado por prioridade na lista de disciplinas sugeridas.
+		for(; fluxogramaSi != null && fluxogramaSi.getFluxogramaSI().size() > 0 ;)
+			fluxogramaSi = this.buscaGulosa(fluxogramaSi);
+		
+		return "disciplinaSugeridaList.xhtml";
+	}
 
 	public String getCpf() {
 		return cpf;
@@ -237,4 +321,23 @@ public class LoginController implements Serializable {
 	public void setFluxogramaSi(Fluxograma fluxogramaSi) {
 		this.fluxogramaSi = fluxogramaSi;
 	}
+	
+	public ArrayList<Disciplina> getDisciplinaSugeridaList() {
+		return disciplinaSugeridaList;
+	}
+
+	public void setDisciplinaSugeridaList(ArrayList<Disciplina> disciplinaSugeridaList) {
+		this.disciplinaSugeridaList = disciplinaSugeridaList;
+	}
+
+	/*
+	 * Component do prime
+	 */
+    public int getCurrentLevel() {  
+        return currentLevel;  
+    }  
+  
+    public void setCurrentLevel(int currentLevel) {  
+        this.currentLevel = currentLevel;  
+    } 
 }

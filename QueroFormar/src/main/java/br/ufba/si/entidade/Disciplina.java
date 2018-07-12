@@ -24,7 +24,7 @@ public class Disciplina {
     private ArrayList<Disciplina> liberaList = new ArrayList<Disciplina>();
     // Nossa heuristica é o "peso" = tamanho da cadeia mais longa
     private Integer peso;
-    
+    private Integer ativo = 1; // se 1 entao disciplina nao foi removida
     
 	
 	public Disciplina() {
@@ -133,6 +133,119 @@ public class Disciplina {
 	public void setPeso(Integer peso) {
 		this.peso = peso;
 	}
+
+	public Integer getAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(Integer ativo) {
+		this.ativo = ativo;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((ativo == null) ? 0 : ativo.hashCode());
+		result = prime * result + cargaHoraria;
+		result = prime * result + ((codAbertasList == null) ? 0 : codAbertasList.hashCode());
+		result = prime * result + ((codPreRequisitosList == null) ? 0 : codPreRequisitosList.hashCode());
+		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((liberaList == null) ? 0 : liberaList.hashCode());
+		result = prime * result + ((natureza == null) ? 0 : natureza.hashCode());
+		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(nota);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + ((peso == null) ? 0 : peso.hashCode());
+		result = prime * result + ((resultado == null) ? 0 : resultado.hashCode());
+		result = prime * result + ((rreRequisitosList == null) ? 0 : rreRequisitosList.hashCode());
+		result = prime * result + ((semestre == null) ? 0 : semestre.hashCode());
+		return result;
+	}
+
+	
+	
+	@Override
+	public String toString() {
+		return "Disciplina [codigo=" + codigo + "]";
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Disciplina other = (Disciplina) obj;
+		if (ativo == null) {
+			if (other.ativo != null)
+				return false;
+		} else if (!ativo.equals(other.ativo))
+			return false;
+		if (cargaHoraria != other.cargaHoraria)
+			return false;
+		if (codAbertasList == null) {
+			if (other.codAbertasList != null)
+				return false;
+		} else if (!codAbertasList.equals(other.codAbertasList))
+			return false;
+		if (codPreRequisitosList == null) {
+			if (other.codPreRequisitosList != null)
+				return false;
+		} else if (!codPreRequisitosList.equals(other.codPreRequisitosList))
+			return false;
+		if (codigo == null) {
+			if (other.codigo != null)
+				return false;
+		} else if (!codigo.equals(other.codigo))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (liberaList == null) {
+			if (other.liberaList != null)
+				return false;
+		} else if (!liberaList.equals(other.liberaList))
+			return false;
+		if (natureza == null) {
+			if (other.natureza != null)
+				return false;
+		} else if (!natureza.equals(other.natureza))
+			return false;
+		if (nome == null) {
+			if (other.nome != null)
+				return false;
+		} else if (!nome.equals(other.nome))
+			return false;
+		if (Double.doubleToLongBits(nota) != Double.doubleToLongBits(other.nota))
+			return false;
+		if (peso == null) {
+			if (other.peso != null)
+				return false;
+		} else if (!peso.equals(other.peso))
+			return false;
+		if (resultado != other.resultado)
+			return false;
+		if (rreRequisitosList == null) {
+			if (other.rreRequisitosList != null)
+				return false;
+		} else if (!rreRequisitosList.equals(other.rreRequisitosList))
+			return false;
+		if (semestre == null) {
+			if (other.semestre != null)
+				return false;
+		} else if (!semestre.equals(other.semestre))
+			return false;
+		return true;
+	}
+	
+	
 	
 	
 }
