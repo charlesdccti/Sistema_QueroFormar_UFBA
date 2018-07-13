@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
@@ -18,7 +19,7 @@ import br.ufba.si.entidade.Fluxograma;
 import br.ufba.si.entidade.Usuario;
 
 @Named
-@ViewScoped
+@SessionScoped
 @ManagedBean(name = "inicioController")
 public class InicioController implements Serializable {
 

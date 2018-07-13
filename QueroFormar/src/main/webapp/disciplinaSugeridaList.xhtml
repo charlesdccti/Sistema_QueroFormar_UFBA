@@ -8,22 +8,19 @@
 
     
     <ui:define name="corpo"> 
-    <title>Desempenho no Curso e Aprovadas</title>
-    <h2>Materias Cursadas</h2>
+    
+    <h2>Disciplinas Sugeridas</h2>
 
  	<pe:masterDetail id="masterDetail" level="#{loginController.currentLevel}">  
   
 	    <pe:masterDetailLevel level="1" levelLabel="Sports">  
-	        <p:dataTable id="sports" value="#{loginController.usuarioLogado.materiasAprovadas}"  var="disciplina">  
+	        <p:dataTable id="sports" value="#{loginController.disciplinaSugeridaList}"  var="disciplina">  
 	            <p:column headerText="Disciplinas">  
 	                <p:commandLink value="#{disciplina.nome}">  
 	                    <pe:selectDetailLevel contextValue="#{sport}"/>  
 	                </p:commandLink>  
 	            </p:column>  
-	            <p:column headerText="Nota">
-	            	<p:commandLink value="#{disciplina.nota}">  
-	                    <pe:selectDetailLevel contextValue="#{sport}"/>  
-	                </p:commandLink>   
+	            <p:column headerText="Prioridade">  
 	            </p:column>  
 	        </p:dataTable>  
 	    </pe:masterDetailLevel> 

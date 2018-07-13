@@ -67,8 +67,7 @@ public class AutenticarSiac {
 	       /* Efetua o POST */
 	       HttpResponse response = client.execute(post);
 	        
-	       /* Resposta HTTP: Sempre imprimirá “HTTP/1.1 302 Object moved” (no caso da devmedia) */
-	       System.out.println("Login form get: " + response.getStatusLine());
+	       
 	        
 	       /* 
 	        * Consome o conteúdo retornado pelo servidor
@@ -92,11 +91,8 @@ public class AutenticarSiac {
 	        * Verifica se a String: "ALUNO(A):" está presente
 	        */
 	       if (checkSuccess(response)) {
-	           System.out.println("Conexao Estabelecida!");
 	           result = true;
-	       } else {
-	           System.out.println("Login não-efetuado!");
-	       }  
+	       } 
 	       
 	       return result;
 	   }
@@ -292,9 +288,7 @@ public class AutenticarSiac {
 		   AutenticarSiac navegador = new AutenticarSiac();
 
 	       try {
-	           // Tenta efetuar login
-	    	   // "05416065575", "NW62LFAB");
-	    	   //"02278164554", "adrianolucas");
+	           
 	           boolean ok = navegador.login(url, cpf, senha);
 	           if (ok) {
 	               // Acessa página restrita
