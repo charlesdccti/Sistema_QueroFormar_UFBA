@@ -20,8 +20,11 @@
 	                    <pe:selectDetailLevel contextValue="#{sport}"/>  
 	                </p:commandLink>  
 	            </p:column>  
-	            <p:column headerText="Prioridade">  
-	            </p:column>  
+	            <p:column headerText="Complexidade"> 
+	             <p:commandLink value="#{disciplina.categoria}">  
+	                    <pe:selectDetailLevel contextValue="#{sport}"/>  
+	                </p:commandLink> 
+	            </p:column>   
 	        </p:dataTable>  
 	    </pe:masterDetailLevel> 
 

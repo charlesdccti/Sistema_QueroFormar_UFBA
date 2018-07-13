@@ -14,6 +14,7 @@ import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 
 import br.ufba.si.business.AutenticarSiac;
+import br.ufba.si.business.RedeNeural;
 import br.ufba.si.entidade.Disciplina;
 import br.ufba.si.entidade.Fluxograma;
 import br.ufba.si.entidade.Usuario;
@@ -36,9 +37,20 @@ public class LoginController implements Serializable {
     private ArrayList<Disciplina> disciplinaSugeridaList = new ArrayList<Disciplina>();
 	
     //component do prami
-    private int currentLevel = 1;  
+    private int currentLevel = 1;
     
-      public LoginController() {
+    
+    private static double TREINO[][] = {
+			{1, 2, 3, 3, 4, 4, 5, 5, 6, 6},
+			{0, 1, 2, 1, 4, 1, 1, 2, 2, 3},
+			{0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5} //bías
+	};
+    
+    private static double ESPERADOS[] = {1.0, 0.833333333, 0.666666667,  0.666666667, 0.5, 0.5, 0.333333333, 0.333333333, 0.166666667, 0.166666667};
+    
+    
+    
+    public LoginController() {
     	
     }
 
@@ -71,21 +83,26 @@ public class LoginController implements Serializable {
 				obterMateriasAprovadas();
 				
 				//Criar Lista de Pre Requisito
-				fluxogramaSi.popularListaRequesitos(fluxogramaSi.getFluxogramaSI());
+				fluxogramaOriginal.popularListaRequesitos(fluxogramaOriginal.getFluxogramaSI());
 				
 				//Criar Lista de Materias Liberadas
-				fluxogramaSi.popularListaMateriasLiberadas(fluxogramaSi.getFluxogramaSI());
+				fluxogramaOriginal.popularListaMateriasLiberadas(fluxogramaOriginal.getFluxogramaSI());
+				
+				carregarNotasEmFluxograma(fluxogramaOriginal);
+				
+				fluxogramaSi.getFluxogramaSI().clear();
+				fluxogramaSi.getFluxogramaSI().addAll(fluxogramaOriginal.getFluxogramaSI());
 				
 				// Se o alunos tem diciplinas aprovadas, entao será removido do fluxogramaSI para aplicar a busca gulosa 
 				// somente nas disciplinas que podem ser sugeridas
 				
-				this.removeAprovadasEmFluxograma(fluxogramaSi);
+				/*this.removeAprovadasEmFluxograma(fluxogramaSi);
 				
 				// Adiciona as disciplinas ordenado por prioridade na lista de disciplinas sugeridas.
 				for(; fluxogramaSi != null && fluxogramaSi.getFluxogramaSI().size() > 0 ;)
 					fluxogramaSi = this.buscaGulosa(fluxogramaSi);
 
-				
+				*/
 				
 				//"/inicio?faces-redirect=false";
 				return "/inicio.xhtml";
@@ -107,25 +124,21 @@ public class LoginController implements Serializable {
 	private void obterMateriasAprovadas() {
 		for (Disciplina disciplia : usuarioLogado.getMateriasCursadas()) {
 			if(disciplia.getResultado().equals(ResultadoEnum.Aprovado) || disciplia.getResultado().equals(ResultadoEnum.DispensaUFBA) || disciplia.getResultado().equals(ResultadoEnum.Dispensado)){
-				//.contains("Optativa")
 				
 				if((disciplia.getResultado().equals(ResultadoEnum.DispensaUFBA) || disciplia.getResultado().equals(ResultadoEnum.Dispensado)) && disciplia.getNatureza() == null && disciplia.getNome().contains("OPTATIVA")){
 					disciplia.setNatureza("Optativa");
 				}
 				
-				System.out.println(disciplia.getNome() + " " + disciplia.getNatureza());
 				usuarioLogado.getMateriasAprovadas().add(disciplia);
 			}
 		}
 	}
     
-    
-    
     private void removeAprovadasEmFluxograma(Fluxograma fluxogramaFaltante) {
 		ArrayList<Disciplina> fluxoGramaFaltantes = new ArrayList<Disciplina>();
 		fluxoGramaFaltantes.addAll(fluxogramaFaltante.getFluxogramaSI());
 		for (Disciplina materia : usuarioLogado.getMateriasAprovadas()){
-			System.out.println(materia.getCodigo() + " " + materia.getNatureza());
+			
 			for (Disciplina disciplina : fluxogramaFaltante.getFluxogramaSI()) {
 				if(disciplina.getCodigo() != null && disciplina.getCodigo().equals(materia.getCodigo())){
 					fluxoGramaFaltantes.remove(disciplina);				
@@ -137,77 +150,20 @@ public class LoginController implements Serializable {
 		}
 		fluxogramaFaltante.getFluxogramaSI().clear();
 		fluxogramaFaltante.getFluxogramaSI().addAll(fluxoGramaFaltantes);
-		//this.buscaGulosa(fluxogramaSi);
 	}
     
-    
-    
-    
-    
-    /*private void obterMateriasAprovadas() {
-    	int qtd = 0;
-    	
-    	for (int i = 0; qtd < 4 && i < fluxogramaSi.getFluxogramaSI().size(); i++) {
-    		Disciplina disciplia = fluxogramaSi.getFluxogramaSI().get(i);
-
-    		usuarioLogado.getMateriasAprovadas().add(disciplia);
-    		qtd++;
-    		
-    	}
-    }*/
-	
-	/*private void removeAprovadasEmFluxograma(Fluxograma fluxograma) {
-		
+    private void carregarNotasEmFluxograma(Fluxograma fluxograma) {
 		for (Disciplina materia : usuarioLogado.getMateriasAprovadas()){
-			
-			if( fluxogramaSi.getFluxogramaSI().contains(materia)){
-	
-				//materia.setAtivo(0);
-				fluxogramaSi.getFluxogramaSI().remove(materia);
+			for (Disciplina disciplina : fluxograma.getFluxogramaSI()) {
+				if(disciplina.getCodigo() != null && disciplina.getCodigo().equals(materia.getCodigo())){
+					disciplina.setNota(materia.getNota());				
+					
+				}else if (disciplina.getCodigo() == null && disciplina.getNatureza().trim().equalsIgnoreCase(materia.getNatureza().trim())){
+					disciplina.setNota(materia.getNota());
+				}
 			}
 		}
-		
-		//this.buscaGulosa(fluxogramaSi);
-		
-	}*/
-    
-    
-//	
-//	private void removeAprovadasEmFluxograma(Fluxograma fluxograma) {
-//		//double notaAprovacao = 5;
-//		//ArrayList<Disciplina> posiçoesre;
-//		Integer qtd = 0;
-//		
-////		for (int i = 0; i < fluxograma.getFluxogramaSI().size(); i++) {			
-////			Disciplina materia = fluxograma.getFluxogramaSI().get(i);
-//		
-//		for (Disciplina materia : fluxograma.getFluxogramaSI()){
-//
-////			if( materia != null ) {
-////				for (Disciplina materiaAprovada :  usuarioLogado.getMateriasAprovadas()){
-////					
-////					if( materia.getAtivo() != 0 || materia.getCodigo().isEmpty() != true && materia.getCodigo() != null )
-//						
-//						
-////
-////						if(materiaAprovada.getCodigo() != null && materiaAprovada.getCodigo().isEmpty() != true)
-//							
-//							//System.out.println(materiaAprovada.getCodigo()+" == "+ materiaAprovada.getCodigo());
-////							System.out.println(qtd);
-////							qtd++;
-////							if( materia.getCodigo().contains(materiaAprovada.getCodigo()) || materiaAprovada.getCodigo().contains(materia.getCodigo())){
-////	
-////								materia.setAtivo(0);
-////								break;
-////							}
-////				}
-////			}
-////
-//		}
-//
-//		this.buscaGulosa(fluxogramaSi);
-//
-//	}
+	}
 	
 	private Fluxograma buscaGulosa(Fluxograma fluxograma) {
 
@@ -217,8 +173,6 @@ public class LoginController implements Serializable {
 			materiaMaiorPrioridade.setPeso(0); 
 
 			for (Disciplina materia : fluxograma.getFluxogramaSI()) {
-				System.out.println(materia.getNome());
-				System.out.println(materia.getPeso());
 				if(materia.getPeso()!= null && materia.getPeso() > materiaMaiorPrioridade.getPeso()){
 					//atualiza a matria de maior prioridade
 					materiaMaiorPrioridade = materia;
@@ -239,29 +193,6 @@ public class LoginController implements Serializable {
 		return fluxograma;
 	}
 
-
-	/*public void CarregarDisciplinas(ArrayList<Disciplina> user, Fluxograma fluxo) {
-		for (Disciplina fluxoGrama : fluxo.getFluxogramaSI()) {
-			System.out.println(fluxoGrama.getCodigo());
-			for (Disciplina disciplina : user) {
-				if(fluxoGrama.getCodigo().equals(disciplina.getCodigo())){
-					disciplina.setCargaHoraria(fluxoGrama.getCargaHoraria());
-					disciplina.setNome(fluxoGrama.getNome());
-					disciplina.setSemestre(fluxoGrama.getSemestre());
-					disciplina.setNatureza(fluxoGrama.getNatureza());
-				}
-			}
-		}
-	}*/
-	
-	
-	/*private void passarUser() {
-		inicioController.getUsuarioLogado().setLogin(usuarioLogado.getLogin());
-		inicioController.getUsuarioLogado().setMatricula(usuarioLogado.getMatricula());
-		inicioController.getUsuarioLogado().setNome(usuarioLogado.getNome());
-		inicioController.getUsuarioLogado().setSenha(usuarioLogado.getSenha());
-	}*/
-
     public String logOff() {
         FacesContext fc = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) fc.getExternalContext().getSession(false);
@@ -271,8 +202,8 @@ public class LoginController implements Serializable {
     
 	public String listaDiscipliasFluxograma() {
 		
-		if(fluxogramaSi.getFluxogramaSI().size() < 45)
-			fluxogramaSi = new Fluxograma();
+		if(fluxogramaOriginal.getFluxogramaSI().size() < 45)
+			fluxogramaOriginal = new Fluxograma();
 		
 		return "fluxogramaSI.xhtml";
 	}
@@ -284,49 +215,80 @@ public class LoginController implements Serializable {
 		// somente nas disciplinas que podem ser sugeridas
 		this.removeAprovadasEmFluxograma(fluxogramaSi);
 		
+		
+		//Chamar a RNA para classificar a criticidade da materia
+		fluxogramaSi = obterRedeNeural(fluxogramaSi);
+		
 		// Adiciona as disciplinas ordenado por prioridade na lista de disciplinas sugeridas.
 		for(; fluxogramaSi != null && fluxogramaSi.getFluxogramaSI().size() > 0 ;)
 			fluxogramaSi = this.buscaGulosa(fluxogramaSi);
+		
+		
 		
 		return "disciplinaSugeridaList.xhtml";
 	}
 
-	
-	
-	
-	/*public String listaDiscipliasSugeridas() {
-		
-		if(fluxogramaSi.getFluxogramaSI().size() < 45)
-			fluxogramaSi = new Fluxograma();
-		
-		// Se o alunos tem diciplinas aprovadas, entao será removido do fluxogramaSI para aplicar a busca gulosa 
-		// somente nas disciplinas que podem ser sugeridas
-		this.removeAprovadasEmFluxograma(fluxogramaSi);
-		
-		// Adiciona as disciplinas ordenado por prioridade na lista de disciplinas sugeridas.
-		for(; fluxogramaSi != null && fluxogramaSi.getFluxogramaSI().size() > 0 ;)
-			fluxogramaSi = this.buscaGulosa(fluxogramaSi);
-		
-		return "disciplinaSugeridaList.xhtml";
-	}*/
 
-	/*public String listaDiscipliasSugeridas() {
-		
-		if(fluxogramaSi.getFluxogramaSI().size() < 45)
-			fluxogramaSi = new Fluxograma();
-		
-		// Se o alunos tem diciplinas aprovadas, entao será removido do fluxogramaSI para aplicar a busca gulosa 
-		// somente nas disciplinas que podem ser sugeridas
-		this.removeAprovadasEmFluxograma(fluxogramaSi);
-		
-		// Adiciona as disciplinas ordenado por prioridade na lista de disciplinas sugeridas.
-		for(; fluxogramaSi != null && fluxogramaSi.getFluxogramaSI().size() > 0 ;)
-			fluxogramaSi = this.buscaGulosa(fluxogramaSi);
-		
-		return "disciplinaSugeridaList.xhtml";
-	}*/
 	
+	private Fluxograma obterRedeNeural(Fluxograma fluxograma){
+		obterVariaveisRNA(fluxograma);
+		executorRNA(fluxograma);
+		return fluxograma;
+	}
+
+	private void executorRNA(Fluxograma fluxograma){
+		double[] classificar = new double[3];
+		
+		RedeNeural rede = new RedeNeural(10, 3);
+		rede.treinar(TREINO, ESPERADOS);
+		
+		for (Disciplina disciplina : fluxograma.getFluxogramaSI()) {
+			classificar[0] = disciplina.getMediaPreRequisitos();
+			classificar[1] = disciplina.getLiberaList().size();
+			classificar[2] = 1; //bais
+			
+			disciplina.setCategoria(rede.classificar(classificar));
+					
+		}
+	}
 	
+	private void obterVariaveisRNA(Fluxograma fluxograma) {
+		ArrayList<Disciplina> lista = new ArrayList<Disciplina>();
+		ArrayList<Disciplina> listaAux = new ArrayList<Disciplina>();
+		for (Disciplina disciplina : fluxograma.getFluxogramaSI()) {
+			lista = new ArrayList<Disciplina>();
+			listaAux = new ArrayList<Disciplina>();
+			if(disciplina.getPreRequisitosList() != null && disciplina.getPreRequisitosList().size() > 0){
+				obterMaterias(disciplina, listaAux);	
+			}
+			listaAux.remove(disciplina);
+			for (Disciplina mat : listaAux) {
+				if(!lista.contains(mat))
+					lista.add(mat);
+			}
+			double mediaPreRequisitos = (obterNotas(lista)/lista.size());
+			disciplina.setMediaPreRequisitos(Math.round(mediaPreRequisitos));
+
+		}
+	}
+	
+	private double obterNotas(ArrayList<Disciplina> lista){
+		double nota = 0.0;
+		for (Disciplina disciplina : lista) {
+			nota =  disciplina.getNota() + nota;
+		}
+		return nota;
+	}
+	
+	//Ontem quantidade de materias cursada ate a atua
+	private void obterMaterias(Disciplina disciplina, ArrayList<Disciplina> lista){
+		if(disciplina.getPreRequisitosList() != null && disciplina.getPreRequisitosList().size() > 0){
+			for (Disciplina materia : disciplina.getPreRequisitosList()) {
+				obterMaterias(materia, lista);
+			}
+		}
+		lista.add(disciplina);
+}
 	
 	
 	public String getCpf() {

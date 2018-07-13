@@ -25,6 +25,11 @@ public class Disciplina {
     // Nossa heuristica é o "peso" = tamanho da cadeia mais longa
     private Integer peso;
     private Integer ativo = 1; // se 1 entao disciplina nao foi removida
+    //Media de todas as materias prerequito da disciplina
+    private double mediaPreRequisitos;
+    //Categoria da disciplina de acordo com a RNA
+    private String categoria;
+    
 	
 	public Disciplina() {
 	
@@ -258,6 +263,21 @@ public class Disciplina {
 		} else if (!semestre.equals(other.semestre))
 			return false;
 		return true;
-	}	
-	
+	}
+
+	public double getMediaPreRequisitos() {
+		return mediaPreRequisitos;
+	}
+
+	public void setMediaPreRequisitos(double mediaPreRequisitos) {
+		this.mediaPreRequisitos = mediaPreRequisitos;
+	}
+
+	public String getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
+	}
 }

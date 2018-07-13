@@ -216,7 +216,7 @@ public class Fluxograma implements Serializable {
 		MATB02.setPeso(1);
 		fluxogramaSI.add(MATB02);
 				
-		Disciplina MATA64 = new Disciplina( "MATA64", "INTELIGÊNCIA ARTIFICIAL", 68, "Obrigatória", null, "7", new ArrayList<String>(){{add("MATA37"); // ILP
+		Disciplina MATA64 = new Disciplina( "MATA64", "INTELIGÊNCIA ARTIFICIAL", 68, "Obrigatória", null, "7", new ArrayList<String>(){{add("MATC73"); // ILP
 				add("MATD04");}}, null);
 		
 		MATA64.setPeso(1);
