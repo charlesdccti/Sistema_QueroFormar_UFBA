@@ -67,8 +67,7 @@ public class AutenticarSiac {
 	       /* Efetua o POST */
 	       HttpResponse response = client.execute(post);
 	        
-	       /* Resposta HTTP: Sempre imprimirá “HTTP/1.1 302 Object moved” (no caso da devmedia) */
-	       System.out.println("Login form get: " + response.getStatusLine());
+	       
 	        
 	       /* 
 	        * Consome o conteúdo retornado pelo servidor

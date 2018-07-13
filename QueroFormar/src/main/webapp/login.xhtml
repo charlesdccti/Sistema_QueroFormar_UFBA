@@ -27,8 +27,8 @@
                     Digite seu usuário e senha do SIAC Aluno WEB para ter acesso ao sistema:                    
                     <p:messages id="messagesLogin" />
 						<br> </br>
-						<p:inputText placeholder="CPF" value="#{loginController.cpf}" size="40" required="true" maxlength="11" requiredMessage="Campo CPF é obrigatório"/>
-                    	<p:password placeholder="Senha do SIAC" value="#{loginController.senha}" size="40" required="true" requiredMessage="Campo Senha é obrigatório"/>
+						<p:inputText id="cpf" placeholder="CPF" value="#{loginController.cpf}" size="40" required="true" maxlength="11" requiredMessage="Campo CPF é obrigatório"/>
+                    	<p:password id="senha" placeholder="Senha do SIAC" value="#{loginController.senha}" size="40" required="true" requiredMessage="Campo Senha é obrigatório"/>
                     	
 						<br> </br>
 						<p:commandButton value="Log In"

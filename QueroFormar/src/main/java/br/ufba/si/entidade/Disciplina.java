@@ -20,7 +20,7 @@ public class Disciplina {
 	private String semestre;
 	private ArrayList<String> codPreRequisitosList;
 	private ArrayList<String> codAbertasList;
-	private ArrayList<Disciplina> rreRequisitosList = new ArrayList<Disciplina>();
+	private ArrayList<Disciplina> preRequisitosList = new ArrayList<Disciplina>();
     private ArrayList<Disciplina> liberaList = new ArrayList<Disciplina>();
     // Nossa heuristica é o "peso" = tamanho da cadeia mais longa
     private Integer peso;
@@ -160,7 +160,7 @@ public class Disciplina {
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + ((peso == null) ? 0 : peso.hashCode());
 		result = prime * result + ((resultado == null) ? 0 : resultado.hashCode());
-		result = prime * result + ((rreRequisitosList == null) ? 0 : rreRequisitosList.hashCode());
+		result = prime * result + ((preRequisitosList == null) ? 0 : preRequisitosList.hashCode());
 		result = prime * result + ((semestre == null) ? 0 : semestre.hashCode());
 		return result;
 	}
@@ -232,10 +232,10 @@ public class Disciplina {
 			return false;
 		if (resultado != other.resultado)
 			return false;
-		if (rreRequisitosList == null) {
-			if (other.rreRequisitosList != null)
+		if (preRequisitosList == null) {
+			if (other.preRequisitosList != null)
 				return false;
-		} else if (!rreRequisitosList.equals(other.rreRequisitosList))
+		} else if (!preRequisitosList.equals(other.preRequisitosList))
 			return false;
 		if (semestre == null) {
 			if (other.semestre != null)
