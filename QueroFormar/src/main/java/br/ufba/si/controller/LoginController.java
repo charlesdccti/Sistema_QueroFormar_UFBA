@@ -9,8 +9,8 @@ import java.util.Random;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 
@@ -21,7 +21,7 @@ import br.ufba.si.entidade.Usuario;
 import br.ufba.si.utils.ResultadoEnum;
 
 @Named
-@ViewScoped
+@SessionScoped
 @ManagedBean(name = "loginController")
 public class LoginController implements Serializable {
 
@@ -35,18 +35,15 @@ public class LoginController implements Serializable {
     private String matricula;
     
     private Fluxograma fluxogramaSi;
+    
+    private Fluxograma fluxogramaOriginal = new Fluxograma();
    
     private ArrayList<Disciplina> disciplinaSugeridaList = new ArrayList<Disciplina>();
 	
     //component do prami
     private int currentLevel = 1;  
     
-    //@EJB
-    //InicioController inicioController = new InicioController();
-
-   
-
-    public LoginController() {
+      public LoginController() {
     	
     }
 
@@ -115,6 +112,13 @@ public class LoginController implements Serializable {
 	private void obterMateriasAprovadas() {
 		for (Disciplina disciplia : usuarioLogado.getMateriasCursadas()) {
 			if(disciplia.getResultado().equals(ResultadoEnum.Aprovado) || disciplia.getResultado().equals(ResultadoEnum.DispensaUFBA) || disciplia.getResultado().equals(ResultadoEnum.Dispensado)){
+				//.contains("Optativa")
+				
+				if((disciplia.getResultado().equals(ResultadoEnum.DispensaUFBA) || disciplia.getResultado().equals(ResultadoEnum.Dispensado)) && disciplia.getNatureza() == null && disciplia.getNome().contains("OPTATIVA")){
+					disciplia.setNatureza("Optativa");
+				}
+				
+				System.out.println(disciplia.getNome() + " " + disciplia.getNatureza());
 				usuarioLogado.getMateriasAprovadas().add(disciplia);
 			}
 		}
@@ -126,11 +130,12 @@ public class LoginController implements Serializable {
 		ArrayList<Disciplina> fluxoGramaFaltantes = new ArrayList<Disciplina>();
 		fluxoGramaFaltantes.addAll(fluxogramaFaltante.getFluxogramaSI());
 		for (Disciplina materia : usuarioLogado.getMateriasAprovadas()){
-			
+			System.out.println(materia.getCodigo() + " " + materia.getNatureza());
 			for (Disciplina disciplina : fluxogramaFaltante.getFluxogramaSI()) {
 				if(disciplina.getCodigo() != null && disciplina.getCodigo().equals(materia.getCodigo())){
-					fluxoGramaFaltantes.remove(disciplina);
-				}else if (disciplina.getCodigo() == null && disciplina.getNatureza().equals(materia.getNatureza())){
+					fluxoGramaFaltantes.remove(disciplina);				
+					
+				}else if (disciplina.getCodigo() == null && disciplina.getNatureza().trim().equalsIgnoreCase(materia.getNatureza().trim())){
 					fluxoGramaFaltantes.remove(disciplina);
 				}
 			}
@@ -403,4 +408,12 @@ public class LoginController implements Serializable {
     public void setCurrentLevel(int currentLevel) {  
         this.currentLevel = currentLevel;  
     }
+
+	public Fluxograma getFluxogramaOriginal() {
+		return fluxogramaOriginal;
+	}
+
+	public void setFluxogramaOriginal(Fluxograma fluxogramaOriginal) {
+		this.fluxogramaOriginal = fluxogramaOriginal;
+	}
 }

@@ -1,28 +1,36 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html" 
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                template="/WEB-INF/template.xhtml">
+                template="/WEB-INF/template.xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:pe="http://primefaces.org/ui/extensions">
 
-   
     
-    <ui:define name="corpo">              
-        <title>Desempenho no Curso</title>
-      	<h:form>
-			<h2>Inicio no Curso</h2>
-			
-			<br />
-			<h3>Obrigatórias:</h3>
-			<p:spacer></p:spacer>
-			<div class="knob-container ui-corner-all">
-			    <p:knob foregroundColor="blue" backgroundColor="#00000"  labelTemplate="50%" disabled="true" value="loginController.value"/>
-			</div>
-			<h3>Optativas: </h3>
-			<p:spacer></p:spacer>
-			<div class="knob-container ui-corner-all">			    
-			    <p:knob foregroundColor="green" backgroundColor="#00000" labelTemplate="20%" value="20" disabled="true"     />
-			</div>
-    	</h:form>               
+    <ui:define name="corpo"> 
+    <title>Desempenho no Curso e Aprovadas</title>
+    <h2>Materias Cursadas</h2>
+
+ 	<pe:masterDetail id="masterDetail" level="#{loginController.currentLevel}">  
+  
+	    <pe:masterDetailLevel level="1" levelLabel="Sports">  
+	        <p:dataTable id="sports" value="#{loginController.usuarioLogado.materiasAprovadas}"  var="disciplina">  
+	            <p:column headerText="Disciplinas">  
+	                <p:commandLink value="#{disciplina.nome}">  
+	                    <pe:selectDetailLevel contextValue="#{sport}"/>  
+	                </p:commandLink>  
+	            </p:column>  
+	            <p:column headerText="Nota">
+	            	<p:commandLink value="#{disciplina.nota}">  
+	                    <pe:selectDetailLevel contextValue="#{sport}"/>  
+	                </p:commandLink>   
+	            </p:column>  
+	        </p:dataTable>  
+	    </pe:masterDetailLevel> 
+
+	</pe:masterDetail>
+
     </ui:define>
+
 </ui:composition>
+

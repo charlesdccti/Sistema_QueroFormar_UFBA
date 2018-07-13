@@ -15,13 +15,21 @@
  	<pe:masterDetail id="masterDetail" level="#{loginController.currentLevel}">  
   
 	    <pe:masterDetailLevel level="1" levelLabel="Sports">  
-	        <p:dataTable id="sports" value="#{loginController.fluxogramaFaltante.fluxogramaSI}" var="disciplina">  
+	        <p:dataTable id="sports" value="#{loginController.fluxogramaOriginal.fluxogramaSI}" var="disciplina">  
 	            <p:column headerText="Disciplinas">  
 	                <p:commandLink value="#{disciplina.nome}">  
 	                    <pe:selectDetailLevel contextValue="#{sport}"/>  
 	                </p:commandLink>  
 	            </p:column>  
-	            <p:column headerText="Prioridade">  
+	            <p:column headerText="Semestre">
+	            	<p:commandLink value="#{disciplina.semestre}">  
+	                    <pe:selectDetailLevel contextValue="#{sport}"/>  
+	                </p:commandLink>  
+	            </p:column>
+	            <p:column headerText="Prioridade">
+	            	<p:commandLink value="#{disciplina.peso}">  
+	                    <pe:selectDetailLevel contextValue="#{sport}"/>  
+	                </p:commandLink>  
 	            </p:column>  
 	        </p:dataTable>  
 	    </pe:masterDetailLevel> 
