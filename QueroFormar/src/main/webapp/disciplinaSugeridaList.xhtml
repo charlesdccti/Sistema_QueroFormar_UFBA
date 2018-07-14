@@ -8,7 +8,9 @@
 
     
     <ui:define name="corpo"> 
-    
+ <!-- CODIGO DE CHARLES -->   
+<!-- 
+<<<<<<< HEAD
     	<h:form id="form2">
     		<p:growl id="msgs" showDetail="true" />
 			
@@ -39,7 +41,7 @@
 <!-- 			        						<p:commandLink id="btAbrirArvore" process="form" update="@this" action="#{treeManagedBean.abrirArvore}"  value="Mostrar Arvore de Pré-Requesitos" icon="ui-icon-plus" title="Mostrar Arvore de Pré-Requesitos">
 												<f:setPropertyActionListener for="btAbrirArvore" value="#{disciplina}" target="#{treeManagedBean.disciplinaSelecionada}" />
 								   			</p:commandLink> -->
-							        </p:tab>
+ <!-- 							        </p:tab>
 							    </p:accordionPanel>
 						    
 							<br/><br/>
@@ -52,6 +54,34 @@
 
 
 		</h:form>
+-->
+<!-- FIM CODIGO CHARLES -->
+    <h2>Disciplinas Sugeridas</h2>
+
+ 	<pe:masterDetail id="masterDetail" level="#{loginController.currentLevel}">  
+  
+	    <pe:masterDetailLevel level="1" levelLabel="Sports">  
+	        <p:dataTable id="sports" value="#{loginController.disciplinaSugeridaList}"  var="disciplina">  
+	            <p:column headerText="Disciplinas">  
+	                <p:commandLink value="#{disciplina.nome}">  
+	                    <pe:selectDetailLevel contextValue="#{sport}"/>  
+	                </p:commandLink>  
+	            </p:column> 
+	            <p:column headerText="Semestre"> 
+	             <p:commandLink value="#{disciplina.semestre}">  
+	                    <pe:selectDetailLevel contextValue="#{sport}"/>  
+	                </p:commandLink> 
+	            </p:column>  
+	            <p:column headerText="Complexidade"> 
+	             <p:commandLink value="#{disciplina.categoria}">  
+	                    <pe:selectDetailLevel contextValue="#{sport}"/>  
+	                </p:commandLink> 
+	            </p:column>   
+	        </p:dataTable>  
+	    </pe:masterDetailLevel> 
+
+	</pe:masterDetail>
+>>>>>>> master
 
     </ui:define>
 

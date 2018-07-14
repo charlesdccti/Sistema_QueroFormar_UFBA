@@ -25,6 +25,10 @@ public class Disciplina {
     // Nossa heuristica é o "peso" = tamanho da cadeia mais longa
     private Integer peso;
     private Integer ativo = 1; // se 1 entao disciplina nao foi removida
+    //Media de todas as materias prerequito da disciplina
+    private double mediaPreRequisitos;
+    //Categoria da disciplina de acordo com a RNA
+    private String categoria;
     
 	
 	public Disciplina() {
@@ -126,6 +130,22 @@ public class Disciplina {
 		this.nota = nota;
 	}
 
+	public ArrayList<Disciplina> getLiberaList() {
+		return liberaList;
+	}
+
+	public void setLiberaList(ArrayList<Disciplina> liberaList) {
+		this.liberaList = liberaList;
+	}
+	
+	public ArrayList<Disciplina> getPreRequisitosList() {
+		return preRequisitosList;
+	}
+
+	public void setPreRequisitosList(ArrayList<Disciplina> preRequisitosList) {
+		this.preRequisitosList = preRequisitosList;
+	}
+
 	public Integer getPeso() {
 		return peso;
 	}
@@ -143,13 +163,13 @@ public class Disciplina {
 	}
 	
 
-	public ArrayList<Disciplina> getPreRequisitosList() {
+	/*public ArrayList<Disciplina> getPreRequisitosList() {
 		return preRequisitosList;
 	}
 
 	public void setPreRequisitosList(ArrayList<Disciplina> preRequisitosList) {
 		this.preRequisitosList = preRequisitosList;
-	}
+	}*/
 
 	@Override
 	public int hashCode() {
@@ -253,8 +273,20 @@ public class Disciplina {
 			return false;
 		return true;
 	}
-	
-	
-	
-	
+
+	public double getMediaPreRequisitos() {
+		return mediaPreRequisitos;
+	}
+
+	public void setMediaPreRequisitos(double mediaPreRequisitos) {
+		this.mediaPreRequisitos = mediaPreRequisitos;
+	}
+
+	public String getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
+	}
 }
