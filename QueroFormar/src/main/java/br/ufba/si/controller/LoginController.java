@@ -12,7 +12,6 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
@@ -146,19 +145,19 @@ public class LoginController implements Serializable {
     private void removeAprovadasEmFluxograma(Fluxograma fluxogramaFaltante) {
 		ArrayList<Disciplina> fluxoGramaFaltantes = new ArrayList<Disciplina>();
 		fluxoGramaFaltantes.addAll(fluxogramaFaltante.getFluxogramaSI());
+		
 		for (Disciplina materia : usuarioLogado.getMateriasAprovadas()){
 			System.out.println(materia.getCodigo() + " " + materia.getNatureza());
 			for (Disciplina disciplina : fluxogramaFaltante.getFluxogramaSI()) {
 				if(disciplina.getCodigo() != null && disciplina.getCodigo().equals(materia.getCodigo())){
-<<<<<<< HEAD
-=======
+
 					fluxoGramaFaltantes.remove(disciplina);				
 					
+				// Não é porque disciplina faltante tem mesma natureza de de uma matéria aprovada que devemos que devemos retirar ela de disciplina faltantes
 				}else if (disciplina.getCodigo() == null && disciplina.getNatureza().trim().equalsIgnoreCase(materia.getNatureza().trim())){
->>>>>>> 769f2bece0d2e1472bb264f690555722c40d98c3
 					fluxoGramaFaltantes.remove(disciplina);
 				}
-				// Não é porque disciplina faltante tem mesma natureza de de uma matéria aprovada que devemos que devemos retirar ela de disciplina faltantes
+				
 				//				else if (disciplina.getCodigo() == null && disciplina.getNatureza().equals(materia.getNatureza())){
 				//					fluxoGramaFaltantes.remove(disciplina);
 				//				}
@@ -314,7 +313,7 @@ public class LoginController implements Serializable {
     public void setCurrentLevel(int currentLevel) {  
         this.currentLevel = currentLevel;  
     }
-<<<<<<< HEAD
+//<<<<<<< HEAD
     
     /*
      * Componente AutoComplete
@@ -450,6 +449,12 @@ public class LoginController implements Serializable {
 		return this.semestreList;
 	}
 
+	/**
+	 * Será necessário incluir os obj de pre-requisitos
+	 * 
+	 * @param disciplina
+	 * @return
+	 */
 	private Integer obterTamanhoArvore(Disciplina disciplina) {
 		// Adiciona a raiz
 		this.sequenciaMaiorList.add(disciplina);
@@ -544,9 +549,6 @@ public class LoginController implements Serializable {
 		sequenciaMaiorList = sequenciaMaiorList;
 	}
 	
-
-=======
-
 	public Fluxograma getFluxogramaOriginal() {
 		return fluxogramaOriginal;
 	}
@@ -554,5 +556,4 @@ public class LoginController implements Serializable {
 	public void setFluxogramaOriginal(Fluxograma fluxogramaOriginal) {
 		this.fluxogramaOriginal = fluxogramaOriginal;
 	}
->>>>>>> 769f2bece0d2e1472bb264f690555722c40d98c3
 }
