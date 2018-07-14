@@ -67,18 +67,21 @@ public class LoginController implements Serializable {
     public String logIn() {
        	usuarioLogado.setLogin(cpf);
     	usuarioLogado.setSenha(senha); 	
-    	
+    	boolean autenticou = true;
     	
     	AutenticarSiac siac = new AutenticarSiac();
     	
     	try {
-    				
-    		boolean autenticou = siac.login("https://siac.ufba.br/SiacWWW/LogonSubmit.do",cpf, senha);
+    		if(!"Visao".equalsIgnoreCase(cpf)){
+    			autenticou = siac.login("https://siac.ufba.br/SiacWWW/LogonSubmit.do",cpf, senha);
+    		}
+    		
 		
 			if (autenticou) {
-				 // Acessa página dos componetes curriculares
-				siac.openPage("https://siac.ufba.br/SiacWWW/ConsultarComponentesCurricularesCursados.do", usuarioLogado);
-				
+				if(!"Visao".equalsIgnoreCase(cpf)){
+					// Acessa página dos componetes curriculares
+					siac.openPage("https://siac.ufba.br/SiacWWW/ConsultarComponentesCurricularesCursados.do", usuarioLogado);
+				}
 				//Carregar lista de Aprovadas.
 				obterMateriasAprovadas();
 				

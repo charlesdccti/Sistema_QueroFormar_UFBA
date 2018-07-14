@@ -180,19 +180,18 @@ public class RedeNeural {
 		double cat = valor *6;
 		
 		if(cat > 0.99 &&  cat < 2.0){
-			return "Crítica";
-		}else if(cat > 1.99 &&  cat < 3.0){
 			return "Muito Alta";
-		}else if(cat > 2.99 &&  cat < 4.0){
+		}else if(cat > 1.99 &&  cat < 3.0){
 			return "Alta";
-		}else if(cat > 3.99 &&  cat < 5.0){
+		}else if(cat > 2.99 &&  cat < 4.0){
 			return "Normal";
-		}else if(cat > 4.99 &&  cat < 5.80){
+		}else if(cat > 3.99 &&  cat < 5.0){
 			return "Baixa";
-		}else if(cat > 5.79){
-			return "Muito Baixa";
+		}else if(cat > 4.99 &&  cat < 5.80){
+			return " Muito Baixa";
+		}else{
+			return "Não Classificado";
 		}
-		return "Não Classificado";
 		
 	}
 	
