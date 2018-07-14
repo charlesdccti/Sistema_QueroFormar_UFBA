@@ -60,6 +60,9 @@ public class Fluxograma implements Serializable {
 						add("MATA55"); 
 						add("MATA56"); 
 						add("MATA64"); }});
+		// teste
+		MATD04.getPreRequisitosList().add(MATA37);
+		MATD04.getPreRequisitosList().add(MATA42);
 		
 		MATD04.setPeso(5);
 		fluxogramaSI.add(MATD04);
@@ -92,6 +95,10 @@ public class Fluxograma implements Serializable {
 						add("MATC84"); 
 						add("MATC89"); 
 						add("MATB19"); }});
+		/*
+		 * Teste
+		 */
+		MATA55.getPreRequisitosList().add(MATD04);
 		
 		MATA55.setPeso(4);
 		fluxogramaSI.add(MATA55);
@@ -120,6 +127,8 @@ public class Fluxograma implements Serializable {
 		fluxogramaSI.add(LETA09);
 		
 		Disciplina MATA59 = new Disciplina( "MATA59", "REDES DE COMPUTADORES I", 68, "Obrigatória",  null, "4", new ArrayList<String>(){{add("MATC90");}} , new ArrayList<String>(){{add("MATC89");}});
+		//teste
+		MATA59.getPreRequisitosList().add(MATC90);
 		
 		MATA59.setPeso(2);
 		fluxogramaSI.add(MATA59);
@@ -185,6 +194,11 @@ public class Fluxograma implements Serializable {
 		
 		Disciplina MATC89 = new Disciplina( "MATC89", "APLICAÇÕES PARA DISPOSITIVOS MÓVEIS", 68, "Obrigatória", null, "6", new ArrayList<String>(){{add("MATA55");
 			add("MATA59");}}, null);
+		/*
+		 * Teste de visializaçao da arvore
+		 */
+		MATC89.getPreRequisitosList().add(MATA55);
+		MATC89.getPreRequisitosList().add(MATA59);
 		
 		MATC89.setPeso(1);
 		fluxogramaSI.add(MATC89);

@@ -138,13 +138,13 @@ public class Disciplina {
 		this.liberaList = liberaList;
 	}
 	
-	public ArrayList<Disciplina> getPreRequisitosList() {
-		return preRequisitosList;
-	}
+//	public ArrayList<Disciplina> getPreRequisitosList() {
+//		return preRequisitosList;
+//	}
 
-	public void setPreRequisitosList(ArrayList<Disciplina> preRequisitosList) {
-		this.preRequisitosList = preRequisitosList;
-	}
+//	public void setPreRequisitosList(ArrayList<Disciplina> preRequisitosList) {
+//		this.preRequisitosList = preRequisitosList;
+//	}
 
 	public Integer getPeso() {
 		return peso;
@@ -160,6 +160,15 @@ public class Disciplina {
 
 	public void setAtivo(Integer ativo) {
 		this.ativo = ativo;
+	}
+	
+
+	public ArrayList<Disciplina> getPreRequisitosList() {
+		return preRequisitosList;
+	}
+
+	public void setPreRequisitosList(ArrayList<Disciplina> preRequisitosList) {
+		this.preRequisitosList = preRequisitosList;
 	}
 
 	@Override
