@@ -15,7 +15,7 @@
  	<pe:masterDetail id="masterDetail" level="#{loginController.currentLevel}">  
   
 	    <pe:masterDetailLevel level="1" levelLabel="Sports">  
-	        <p:dataTable id="sports" value="#{loginController.fluxogramaFaltante.fluxogramaSI}" var="disciplina">  
+	        <p:dataTable id="sports" value="#{loginController.fluxogramaSi.fluxogramaSI}" var="disciplina">  
 	            <p:column headerText="Disciplinas">  
 	                <p:commandLink value="#{disciplina.nome}">  
 	                    <pe:selectDetailLevel contextValue="#{sport}"/>  

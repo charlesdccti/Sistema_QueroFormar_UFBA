@@ -9,23 +9,49 @@
     
     <ui:define name="corpo"> 
     
-    <h2>Disciplinas Sugeridas</h2>
+    	<h:form id="form2">
+    		<p:growl id="msgs" showDetail="true" />
+			
+			<h:panelGrid columns="2" cellpadding="5">			
+				<p:outputLabel value="Quantidade de Disciplinas Desejada por Semestre:" for="dd" />
+				<p:inputText size="7" maxlength="12" id="dd" value="#{loginController.qtdDesejada}"/>
+			</h:panelGrid>	
+			
+       		<p:commandButton id="btLocalizar" process="form2" update="form" value="localizar" action="#{loginController.localizar}" icon="ui-icon-plus" title="localizar" />
+			
+    	</h:form>
+    
+		<h:form id="form">
+    		<p:growl id="msgs" showDetail="true" />
 
- 	<pe:masterDetail id="masterDetail" level="#{loginController.currentLevel}">  
-  
-	    <pe:masterDetailLevel level="1" levelLabel="Sports">  
-	        <p:dataTable id="sports" value="#{loginController.disciplinaSugeridaList}"  var="disciplina">  
-	            <p:column headerText="Disciplinas">  
-	                <p:commandLink value="#{disciplina.nome}">  
-	                    <pe:selectDetailLevel contextValue="#{sport}"/>  
-	                </p:commandLink>  
-	            </p:column>  
-	            <p:column headerText="Prioridade">  
-	            </p:column>  
-	        </p:dataTable>  
-	    </pe:masterDetailLevel> 
+			<p:separator />
+			<br/><br/>
+	
+			    <h3>Sugestões por Semestre</h3>
+			    <br/><br/>		    		
+		    		<p:tabView id="tabViewSemestre" value="#{loginController.semestreList}" var="semestre"  >
+		        		<p:tab title="#{semestre.nome}º - Semestre" >
+		            		<h:panelGrid columns="2" cellpadding="20">
+						
+								<p:accordionPanel value="#{semestre.disciplinaList}" var="disciplina" style= "width:300px" >
+			        					<p:tab title="#{disciplina.nome}"   >
+			        					
+<!-- 			        						<p:commandLink id="btAbrirArvore" process="form" update="@this" action="#{treeManagedBean.abrirArvore}"  value="Mostrar Arvore de Pré-Requesitos" icon="ui-icon-plus" title="Mostrar Arvore de Pré-Requesitos">
+												<f:setPropertyActionListener for="btAbrirArvore" value="#{disciplina}" target="#{treeManagedBean.disciplinaSelecionada}" />
+								   			</p:commandLink> -->
+							        </p:tab>
+							    </p:accordionPanel>
+						    
+							<br/><br/>
+							<p:separator />
+		                  	             
 
-	</pe:masterDetail>
+		            		</h:panelGrid>
+		       		 </p:tab>
+		    		</p:tabView> 
+
+
+		</h:form>
 
     </ui:define>
 

@@ -1,0 +1,33 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html" 
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:pe="http://primefaces.org/ui/extensions">
+
+    
+    <ui:define name="corpo"> 
+    
+    <h2>Disciplinas Sugeridas</h2>
+
+ 	<pe:masterDetail id="masterDetail" level="#{loginController.currentLevel}">  
+  
+	    <pe:masterDetailLevel level="1" levelLabel="Sports">  
+	        <p:dataTable id="sports" value="#{loginController.disciplinaSugeridaList}"  var="disciplina">  
+	            <p:column headerText="Disciplinas">  
+	                <p:commandLink value="#{disciplina.nome}">  
+	                    <pe:selectDetailLevel contextValue="#{sport}"/>  
+	                </p:commandLink>  
+	            </p:column>  
+	            <p:column headerText="Prioridade">  
+	            </p:column>  
+	        </p:dataTable>  
+	    </pe:masterDetailLevel> 
+
+	</pe:masterDetail>
+
+    </ui:define>
+
+</ui:composition>
+
