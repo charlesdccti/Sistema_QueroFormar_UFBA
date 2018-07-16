@@ -250,18 +250,17 @@ public class LoginController implements Serializable {
 		fluxogramaSi = obterRedeNeural(fluxogramaSi);
 		
 		//Tirar acuracia da RNA
-		double acuracia = 0.00;
+		double curacia = 0.00;
 		double acertos = 0;
 		
 		for (Disciplina disciplina : fluxogramaSi.getFluxogramaSI()) {
 			acertos = acertos + contarAcertos(disciplina);
 		}
 		if(fluxogramaSi.getFluxogramaSI().size() > 0){
-			acuracia = 	(acertos / fluxogramaSi.getFluxogramaSI().size()) * 100;
-			System.out.printf("Acuracia: %.2f %n", acuracia);
+			curacia = 	(acertos / fluxogramaSi.getFluxogramaSI().size()) * 100;
+			System.out.printf("Curacia: %.2f %n", curacia);
 			System.out.println("Acertos: " + acertos);
 			System.out.println("Amostras: " + fluxogramaSi.getFluxogramaSI().size());
-			
 		}
 			
 		
