@@ -249,9 +249,27 @@ public class LoginController implements Serializable {
 		//Chamar a RNA para classificar a criticidade da materia
 		fluxogramaSi = obterRedeNeural(fluxogramaSi);
 		
+		//Tirar acuracia da RNA
+		double acuracia = 0.00;
+		double acertos = 0;
+		
+		for (Disciplina disciplina : fluxogramaSi.getFluxogramaSI()) {
+			acertos = acertos + contarAcertos(disciplina);
+		}
+		if(fluxogramaSi.getFluxogramaSI().size() > 0){
+			acuracia = 	(acertos / fluxogramaSi.getFluxogramaSI().size()) * 100;
+			System.out.printf("Acuracia: %.2f %n", acuracia);
+			System.out.println("Acertos: " + acertos);
+			System.out.println("Amostras: " + fluxogramaSi.getFluxogramaSI().size());
+			
+		}
+			
+		
 		// Adiciona as disciplinas ordenado por prioridade na lista de disciplinas sugeridas.
 		for(; fluxogramaSi != null && fluxogramaSi.getFluxogramaSI().size() > 0 ;)
 			fluxogramaSi = this.buscaGulosa(fluxogramaSi);
+		
+		
 		
 		
 		return "disciplinaSugeridaList.xhtml";
@@ -271,7 +289,7 @@ public class LoginController implements Serializable {
 	private void executorRNA(Fluxograma fluxograma){
 		double[] classificar = new double[3];
 		
-		RedeNeural rede = new RedeNeural(2, 3);
+		RedeNeural rede = new RedeNeural(5, 3);
 		rede.treino(TREINO, ESPERADOS);
 		
 		for (Disciplina disciplina : fluxograma.getFluxogramaSI()) {
@@ -290,6 +308,41 @@ public class LoginController implements Serializable {
 		return "searchDisciplinasSugeridas.xhtml?faces-redirect=true";
 	}
 
+	
+	
+	private int contarAcertos(Disciplina disciplina){
+		String line = disciplina.getCategoria();
+		int inicio = disciplina.getCategoria().length() - 1;
+		int valor = Integer.parseInt(line.substring(inicio, disciplina.getCategoria().length()));
+		
+		if(disciplina.getPeso().equals(descategorizar(valor))){
+			return 1;
+		}else{
+			return 0;
+		}
+		
+		
+	}
+
+	private int descategorizar(int valor) {
+		switch (valor) {
+			case 1:
+				return 6;
+			case 2:
+				return 5;
+			case 3:
+				return 4;
+			case 4:
+				return 3;
+			case 5:
+				return 2;
+			case 6:
+				return 1;
+			default:
+				return 0;
+		}
+	}
+	
 	
 	public String getCpf() {
 		return cpf;
@@ -343,7 +396,7 @@ public class LoginController implements Serializable {
     public void setCurrentLevel(int currentLevel) {  
         this.currentLevel = currentLevel;  
     }
-//<<<<<<< HEAD
+
     
     /*
      * Componente AutoComplete

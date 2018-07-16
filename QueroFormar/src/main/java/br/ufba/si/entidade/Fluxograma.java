@@ -298,8 +298,6 @@ public class Fluxograma implements Serializable {
 		MATC98.setPeso(1);
 		fluxogramaSI.add(MATC98);	
 		
-		this.popularListas();
-		
 	}
 	
 	
