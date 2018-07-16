@@ -18,7 +18,7 @@ public class RedeNeural {
 		this.inicializarConexoesSinapticasDaRede();
 	}
 
-	public void treinar(double[][] conjuntoTreinamento, double[] valoresEsperados) {
+	public void treino(double[][] conjuntoTreinamento, double[] valoresEsperados) {
 		double erro = 1.0;
 		while ((Math.abs(erro) > 0.05) && (epocas < 100000)) {
 			
@@ -26,7 +26,7 @@ public class RedeNeural {
 				double[] entradaSegundaCamada = propagarSinalPelaPrimeiraCamada(conjuntoTreinamento, i);
 				double valorSaida = propagarSinalPelaSegundaCamada(entradaSegundaCamada);
 				erro = calcularErro(valoresEsperados, valorSaida, i);
-				double gradiente = getGradienteDeRetropopagacao(valorSaida, erro);
+				double gradiente = calcularGradiente(valorSaida, erro);
 				aprender(conjuntoTreinamento, entradaSegundaCamada, gradiente, i);
 			}
 			epocas++;
@@ -110,7 +110,7 @@ public class RedeNeural {
 		}
 	}
 
-	private double getGradienteDeRetropopagacao(double valorSaida, double erro) {
+	private double calcularGradiente(double valorSaida, double erro) {
 		return valorSaida * (1 - valorSaida) * erro;
 	}
 
@@ -180,23 +180,18 @@ public class RedeNeural {
 		double cat = valor *6;
 		
 		if(cat > 0.99 &&  cat < 2.0){
-			return "Muito Alta";
+			return "Categoria 01";
 		}else if(cat > 1.99 &&  cat < 3.0){
-			return "Alta";
+			return "Categoria 02";
 		}else if(cat > 2.99 &&  cat < 4.0){
-			return "Normal";
+			return "Categoria 03";
 		}else if(cat > 3.99 &&  cat < 5.0){
-			return "Baixa";
+			return "Categoria 04";
 		}else if(cat > 4.99 &&  cat < 5.80){
-			return " Muito Baixa";
+			return "Categoria 05";
 		}else{
-			return "Não Classificado";
+			return "Categoria 06";
 		}
 		
 	}
-	
-	
-	
-	
-
 }

@@ -4,23 +4,16 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
-import org.primefaces.context.RequestContext;
-import org.primefaces.model.DefaultTreeNode;
-import org.primefaces.model.TreeNode;
 
 import br.ufba.si.business.AutenticarSiac;
 import br.ufba.si.business.RedeNeural;
@@ -58,13 +51,13 @@ public class LoginController implements Serializable {
     
     
     private static double TREINO[][] = {
-			{1, 2, 3, 3, 4, 4, 5, 5, 6, 6},
-			{0, 1, 2, 1, 4, 1, 1, 2, 2, 3},
-			{0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5} //bías
-	};
-    
-    private static double ESPERADOS[] = {1.0, 0.833333333, 0.666666667,  0.666666667, 0.5, 0.5, 0.333333333, 0.333333333, 0.166666667, 0.166666667};
-    
+    		{2, 1, 4, 2, 1, 0, 3, 1, 2, 0, 1, 1},
+    		{6, 5, 4, 3, 2, 1, 6, 2, 5, 1, 3, 4},
+       		
+    		{0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5} //bÃ­as
+    };
+         
+    private static double ESPERADOS[] = {0.17, 0.33, 0.5, 0.67, 0.83, 1.0, 0.17, 0.83, 0.33, 1.0, 0.67, 0.5};
     
     
     public LoginController() {
@@ -82,24 +75,23 @@ public class LoginController implements Serializable {
     }
 
     public String logIn() {
-				       	usuarioLogado.setLogin(cpf);
-				    	usuarioLogado.setSenha(senha); 	
-				    	boolean autenticou = true;
-				    	
-				    	AutenticarSiac siac = new AutenticarSiac();
-				    	
-				
-				    	try {
-				    		if(!"Visao".equalsIgnoreCase(cpf)){
-				    			autenticou = siac.login("https://siac.ufba.br/SiacWWW/LogonSubmit.do",cpf, senha);
-				    		}
-				    		
-						
-							if (autenticou) {
-								if(!"Visao".equalsIgnoreCase(cpf)){
-									// Acessa página dos componetes curriculares
-									siac.openPage("https://siac.ufba.br/SiacWWW/ConsultarComponentesCurricularesCursados.do", usuarioLogado);
-								}
+       	usuarioLogado.setLogin(cpf);
+    	usuarioLogado.setSenha(senha); 	
+    	boolean autenticou = true;
+    	
+    	AutenticarSiac siac = new AutenticarSiac();
+    	
+
+    	try {
+    		if(!"Visao".equalsIgnoreCase(cpf)){
+    			autenticou = siac.login("https://siac.ufba.br/SiacWWW/LogonSubmit.do",cpf, senha);
+    		}
+    		
+			if (autenticou) {
+				if(!"Visao".equalsIgnoreCase(cpf)){
+					// Acessa página dos componetes curriculares
+					siac.openPage("https://siac.ufba.br/SiacWWW/ConsultarComponentesCurricularesCursados.do", usuarioLogado);
+				}
 
 				//Carregar lista de Aprovadas.
 				obterMateriasAprovadas();
@@ -118,21 +110,6 @@ public class LoginController implements Serializable {
 				fluxogramaSi.getFluxogramaSI().clear();
 				fluxogramaSi.getFluxogramaSI().addAll(disciplinasPopuladas);
 				
-				// Se o alunos tem diciplinas aprovadas, entao será removido do fluxogramaSI para aplicar a busca gulosa 
-
-				// somente nas disciplinas que podem ser sugeridas
-				
-				/*this.removeAprovadasEmFluxograma(fluxogramaSi);
-
-				// Adiciona as disciplinas ordenado por prioridade na lista de disciplinas sugeridas.
-				for(; fluxogramaSi != null && fluxogramaSi.getFluxogramaSI().size() > 0 ;)
-					fluxogramaSi = this.buscaGulosa(fluxogramaSi);
-
-<<<<<<< HEAD
-				*/
-
-				
-				//"/inicio?faces-redirect=false";
 				return "/inicio.xhtml";
 				
 	        }else {       
@@ -151,7 +128,7 @@ public class LoginController implements Serializable {
     
     
   public void popularListas() {
-		
+	  
 	  ArrayList<Disciplina> disciplinaList = fluxogramaOriginal.popularListaRequesitos(fluxogramaOriginal.getFluxogramaSI());
 	  disciplinaList = fluxogramaOriginal.popularListaMateriasLiberadas(disciplinaList);
 	  fluxogramaOriginal.setFluxogramaSI(disciplinaList);
@@ -184,24 +161,25 @@ public class LoginController implements Serializable {
 
 					fluxoGramaFaltantes.remove(disciplina);				
 					
-					// Não é porque disciplina faltante tem mesma natureza de de uma matéria aprovada que devemos que devemos retirar ela de disciplina faltantes
 				}
-					//				else if (disciplina.getCodigo() == null && disciplina.getNatureza().trim().equalsIgnoreCase(materia.getNatureza().trim())){
-					//					fluxoGramaFaltantes.remove(disciplina);
-					//				}
-				
-					//				else if (disciplina.getCodigo() == null && disciplina.getNatureza().equals(materia.getNatureza())){
-					//					fluxoGramaFaltantes.remove(disciplina);
-					//				}
+				else if (disciplina.getCodigo() == null && disciplina.getNatureza().trim().equalsIgnoreCase(materia.getNatureza().trim())){
+					fluxoGramaFaltantes.remove(disciplina);
+				}
+
+				else if (disciplina.getCodigo() == null && disciplina.getNatureza().equals(materia.getNatureza())){
+					fluxoGramaFaltantes.remove(disciplina);
+				}
 			}
 		}
+		
 		fluxogramaFaltante.getFluxogramaSI().clear();
 		fluxogramaFaltante.getFluxogramaSI().addAll(fluxoGramaFaltantes);
 	}
     
 
     private Fluxograma carregarNotasEmFluxograma(Fluxograma fluxograma) {
-		for (Disciplina materia : usuarioLogado.getMateriasAprovadas()){
+		
+    	for (Disciplina materia : usuarioLogado.getMateriasAprovadas()){
 			for (Disciplina disciplina : fluxograma.getFluxogramaSI()) {
 				if(disciplina.getCodigo() != null && disciplina.getCodigo().equals(materia.getCodigo())){
 					disciplina.setNota(materia.getNota());				
@@ -274,15 +252,6 @@ public class LoginController implements Serializable {
 		// Adiciona as disciplinas ordenado por prioridade na lista de disciplinas sugeridas.
 		for(; fluxogramaSi != null && fluxogramaSi.getFluxogramaSI().size() > 0 ;)
 			fluxogramaSi = this.buscaGulosa(fluxogramaSi);
-
-	//		// Se o alunos tem diciplinas aprovadas, entao será removido do fluxogramaSI para aplicar a busca gulosa 
-	//		// somente nas disciplinas que podem ser sugeridas
-	//		this.removeAprovadasEmFluxograma(fluxogramaSi);
-	//		
-	//		// Adiciona as disciplinas ordenado por prioridade na lista de disciplinas sugeridas.
-	//		for(; fluxogramaSi != null && fluxogramaSi.getFluxogramaSI().size() > 0 ;)
-	//			fluxogramaSi = this.buscaGulosa(fluxogramaSi);
-
 		
 		
 		
@@ -296,64 +265,25 @@ public class LoginController implements Serializable {
 
 	
 	private Fluxograma obterRedeNeural(Fluxograma fluxograma){
-		obterVariaveisRNA(fluxograma);
-		executorRNA(fluxograma);
-		return fluxograma;
-	}
+ 		executorRNA(fluxograma);
+ 		return fluxograma;
+ 	}
 
 	private void executorRNA(Fluxograma fluxograma){
 		double[] classificar = new double[3];
 		
-		RedeNeural rede = new RedeNeural(10, 3);
-		rede.treinar(TREINO, ESPERADOS);
+		RedeNeural rede = new RedeNeural(2, 3);
+		rede.treino(TREINO, ESPERADOS);
 		
 		for (Disciplina disciplina : fluxograma.getFluxogramaSI()) {
-			classificar[0] = disciplina.getMediaPreRequisitos();
-			classificar[1] = disciplina.getLiberaList().size();
-			classificar[2] = 1; //bais
+			classificar[0] =  disciplina.getLiberaList().size(); //X
+			classificar[1] =  disciplina.getPeso(); //Y
+ 			classificar[2] = 1; //bais
 			
 			disciplina.setCategoria(rede.classificar(classificar));
 					
 		}
 	}
-	
-	private void obterVariaveisRNA(Fluxograma fluxograma) {
-		ArrayList<Disciplina> lista = new ArrayList<Disciplina>();
-		ArrayList<Disciplina> listaAux = new ArrayList<Disciplina>();
-		for (Disciplina disciplina : fluxograma.getFluxogramaSI()) {
-			lista = new ArrayList<Disciplina>();
-			listaAux = new ArrayList<Disciplina>();
-			if(disciplina.getPreRequisitosList() != null && disciplina.getPreRequisitosList().size() > 0){
-				obterMaterias(disciplina, listaAux);	
-			}
-			listaAux.remove(disciplina);
-			for (Disciplina mat : listaAux) {
-				if(!lista.contains(mat))
-					lista.add(mat);
-			}
-			double mediaPreRequisitos = (obterNotas(lista)/lista.size());
-			disciplina.setMediaPreRequisitos(Math.round(mediaPreRequisitos));
-
-		}
-	}
-	
-	private double obterNotas(ArrayList<Disciplina> lista){
-		double nota = 0.0;
-		for (Disciplina disciplina : lista) {
-			nota =  disciplina.getNota() + nota;
-		}
-		return nota;
-	}
-	
-	//Ontem quantidade de materias cursada ate a atua
-	private void obterMaterias(Disciplina disciplina, ArrayList<Disciplina> lista){
-		if(disciplina.getPreRequisitosList() != null && disciplina.getPreRequisitosList().size() > 0){
-			for (Disciplina materia : disciplina.getPreRequisitosList()) {
-				obterMaterias(materia, lista);
-			}
-		}
-		lista.add(disciplina);
-}
 
 	
 	public String abrirSearchDisciplinasSugeridas() {
@@ -588,11 +518,12 @@ public class LoginController implements Serializable {
         	}        	
         }
         
-        if(disciplinaAUX.getLiberaList().size() > 0){
+        
+        if(disciplinaAUX != null && disciplinaAUX.getLiberaList() != null &&  disciplinaAUX.getLiberaList().size() > 0){
         	this.sequenciaMaiorList.add(disciplinaAUX);
             maiorPeso = -1;
             alturaArvoreGuloso(disciplinaAUX);
-        }else{
+        }else if(disciplinaAUX != null){
         	this.sequenciaMaiorList.add(disciplinaAUX);
         }
         
@@ -614,7 +545,7 @@ public class LoginController implements Serializable {
 	public void localizar() throws Exception {
 		
 		//Carregar lista de Aprovadas.
-		obterMateriasAprovadas();
+		//obterMateriasAprovadas();
 		
 		//Criar Lista de Pre Requisito
 		ArrayList<Disciplina> disciplinasPopuladas = fluxogramaOriginal.popularListaRequesitos(fluxogramaOriginal.getFluxogramaSI());
@@ -656,16 +587,6 @@ public class LoginController implements Serializable {
 		}
 		
 	}
-	
-	
-	//	public String localizar() throws Exception {
-	//		
-	//		//adiciona qtdDesejada na sessão
-	//		//LoginController.getObjectChangePage().put(usuarioLogado.getMatricula(), this.qtdDesejada);
-	//		
-	//		
-	//		return "disciplinaSugeridaList.xhtml?faces-redirect=true";
-	//	}
 
 	public static HashMap<Integer, Object> getFilter() {
 		return filter;
