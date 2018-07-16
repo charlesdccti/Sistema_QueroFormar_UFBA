@@ -61,8 +61,8 @@ public class Fluxograma implements Serializable {
 						add("MATA56"); 
 						add("MATA64"); }});
 		// teste
-		MATD04.getPreRequisitosList().add(MATA37);
-		MATD04.getPreRequisitosList().add(MATA42);
+//		MATD04.getPreRequisitosList().add(MATA37);
+//		MATD04.getPreRequisitosList().add(MATA42);
 		
 		MATD04.setPeso(5);
 		fluxogramaSI.add(MATD04);
@@ -98,7 +98,7 @@ public class Fluxograma implements Serializable {
 		/*
 		 * Teste
 		 */
-		MATA55.getPreRequisitosList().add(MATD04);
+//		MATA55.getPreRequisitosList().add(MATD04);
 		
 		MATA55.setPeso(4);
 		fluxogramaSI.add(MATA55);
@@ -128,7 +128,7 @@ public class Fluxograma implements Serializable {
 		
 		Disciplina MATA59 = new Disciplina( "MATA59", "REDES DE COMPUTADORES I", 68, "Obrigatória",  null, "4", new ArrayList<String>(){{add("MATC90");}} , new ArrayList<String>(){{add("MATC89");}});
 		//teste
-		MATA59.getPreRequisitosList().add(MATC90);
+//		MATA59.getPreRequisitosList().add(MATC90);
 		
 		MATA59.setPeso(2);
 		fluxogramaSI.add(MATA59);
@@ -197,8 +197,8 @@ public class Fluxograma implements Serializable {
 		/*
 		 * Teste de visializaçao da arvore
 		 */
-		MATC89.getPreRequisitosList().add(MATA55);
-		MATC89.getPreRequisitosList().add(MATA59);
+//		MATC89.getPreRequisitosList().add(MATA55);
+//		MATC89.getPreRequisitosList().add(MATA59);
 		
 		MATC89.setPeso(1);
 		fluxogramaSI.add(MATC89);
@@ -296,11 +296,22 @@ public class Fluxograma implements Serializable {
 		Disciplina MATC98 = new Disciplina( "MATC98", "TCC BACHARELADO SISTEMAS DE INFORMAÇÃO II", 136, "Obrigatória", null, "10", new ArrayList<String>(){{add("MATC97");}} , null);
 
 		MATC98.setPeso(1);
-		fluxogramaSI.add(MATC98);		
+		fluxogramaSI.add(MATC98);	
+		
+		this.popularListas();
 		
 	}
 	
+	
+    public void popularListas() {
+		
+		fluxogramaSI = popularListaRequesitos(fluxogramaSI);
+		fluxogramaSI = popularListaMateriasLiberadas(fluxogramaSI);
+    }
+
+	
 	public ArrayList<Disciplina> getFluxogramaSI() {
+
 		return fluxogramaSI;
 	}
 
@@ -308,8 +319,11 @@ public class Fluxograma implements Serializable {
 		this.fluxogramaSI = fluxogramaSI;
 	}
 	
-	public void popularListaRequesitos(ArrayList<Disciplina> fluxogramaSI){
-		for (Disciplina disciplina : fluxogramaSI) {
+	public ArrayList<Disciplina> popularListaRequesitos(ArrayList<Disciplina> fluxogramaSI){
+		ArrayList<Disciplina> disciplinasPopuladas = new ArrayList<Disciplina>();
+		disciplinasPopuladas.addAll(fluxogramaSI);
+		
+		for (Disciplina disciplina : disciplinasPopuladas) {
 			if(disciplina.getCodPreRequisitosList() != null && disciplina.getCodPreRequisitosList().size() > 0){
 				for (String nomeMateria : disciplina.getCodPreRequisitosList()) {
 					for (Disciplina preRequisito : fluxogramaSI) {
@@ -320,10 +334,14 @@ public class Fluxograma implements Serializable {
 				}
 			}
 		}
+		return disciplinasPopuladas;
 	}
 	
-	public void popularListaMateriasLiberadas(ArrayList<Disciplina> fluxogramaSI){
-		for (Disciplina disciplina : fluxogramaSI) {
+	public ArrayList<Disciplina> popularListaMateriasLiberadas(ArrayList<Disciplina> fluxogramaSI){
+		ArrayList<Disciplina> disciplinasPopuladas = new ArrayList<Disciplina>();
+		disciplinasPopuladas.addAll(fluxogramaSI);
+		
+		for (Disciplina disciplina : disciplinasPopuladas) {
 			if(disciplina.getCodAbertasList() != null && disciplina.getCodAbertasList().size() > 0){
 				for (String nomeMateria : disciplina.getCodAbertasList()) {
 					for (Disciplina materiaLiberada : fluxogramaSI) {
@@ -334,6 +352,7 @@ public class Fluxograma implements Serializable {
 				}
 			}
 		}
+		return disciplinasPopuladas;
 	}
 	
 	public void obterTamanhoCadeiaFluxograma(ArrayList<Disciplina> fluxogramaSI){

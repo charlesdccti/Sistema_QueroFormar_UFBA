@@ -82,38 +82,41 @@ public class LoginController implements Serializable {
     }
 
     public String logIn() {
-       	usuarioLogado.setLogin(cpf);
-    	usuarioLogado.setSenha(senha); 	
-    	boolean autenticou = true;
-    	
-    	AutenticarSiac siac = new AutenticarSiac();
-    	
+				//       	usuarioLogado.setLogin(cpf);
+				//    	usuarioLogado.setSenha(senha); 	
+				//    	boolean autenticou = true;
+				    	
+				//    	AutenticarSiac siac = new AutenticarSiac();
+				//    	
+				//
+				//    	try {
+				//    		if(!"Visao".equalsIgnoreCase(cpf)){
+				//    			autenticou = siac.login("https://siac.ufba.br/SiacWWW/LogonSubmit.do",cpf, senha);
+				//    		}
+				//    		
+				//		
+				//			if (autenticou) {
+				//				if(!"Visao".equalsIgnoreCase(cpf)){
+				//					// Acessa página dos componetes curriculares
+				//					siac.openPage("https://siac.ufba.br/SiacWWW/ConsultarComponentesCurricularesCursados.do", usuarioLogado);
+				//				}
 
-    	try {
-    		if(!"Visao".equalsIgnoreCase(cpf)){
-    			autenticou = siac.login("https://siac.ufba.br/SiacWWW/LogonSubmit.do",cpf, senha);
-    		}
-    		
-		
-			if (autenticou) {
-				if(!"Visao".equalsIgnoreCase(cpf)){
-					// Acessa página dos componetes curriculares
-					siac.openPage("https://siac.ufba.br/SiacWWW/ConsultarComponentesCurricularesCursados.do", usuarioLogado);
-				}
-
-				//Carregar lista de Aprovadas.
-				obterMateriasAprovadas();
-				
-				//Criar Lista de Pre Requisito
-				fluxogramaOriginal.popularListaRequesitos(fluxogramaOriginal.getFluxogramaSI());
-				
-				//Criar Lista de Materias Liberadas
-				fluxogramaOriginal.popularListaMateriasLiberadas(fluxogramaOriginal.getFluxogramaSI());
-				
-				carregarNotasEmFluxograma(fluxogramaOriginal);
-				
-				fluxogramaSi.getFluxogramaSI().clear();
-				fluxogramaSi.getFluxogramaSI().addAll(fluxogramaOriginal.getFluxogramaSI());
+//				//Carregar lista de Aprovadas.
+//				obterMateriasAprovadas();
+//				
+//				//Criar Lista de Pre Requisito
+//				ArrayList<Disciplina> disciplinasPopuladas = fluxogramaOriginal.popularListaRequesitos(fluxogramaOriginal.getFluxogramaSI());
+//				
+//				//Criar Lista de Materias Liberadas
+//				disciplinasPopuladas = fluxogramaOriginal.popularListaMateriasLiberadas(disciplinasPopuladas);
+//				
+//				Fluxograma fluxogramaPopulado = fluxogramaOriginal;
+//				fluxogramaPopulado.setFluxogramaSI(disciplinasPopuladas);
+//				
+//				carregarNotasEmFluxograma(fluxogramaPopulado);
+//				
+//				fluxogramaSi.getFluxogramaSI().clear();
+//				fluxogramaSi.getFluxogramaSI().addAll(disciplinasPopuladas);
 				
 				// Se o alunos tem diciplinas aprovadas, entao será removido do fluxogramaSI para aplicar a busca gulosa 
 
@@ -132,20 +135,31 @@ public class LoginController implements Serializable {
 				//"/inicio?faces-redirect=false";
 				return "/inicio.xhtml";
 				
-	        }else {       
-	            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "CPF ou Senha Inválidos", "Login Inválido"));
-	            return null;
-	            
-	        }   	
-    	} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-    	return null;
+//	        }else {       
+//	            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "CPF ou Senha Inválidos", "Login Inválido"));
+//	            return null;
+//	            
+//	        }   	
+//    	} catch (UnsupportedEncodingException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//    	return null;
     }
 
+    
+    
+  public void popularListas() {
+		
+	  ArrayList<Disciplina> disciplinaList = fluxogramaOriginal.popularListaRequesitos(fluxogramaOriginal.getFluxogramaSI());
+	  disciplinaList = fluxogramaOriginal.popularListaMateriasLiberadas(disciplinaList);
+	  fluxogramaOriginal.setFluxogramaSI(disciplinaList);
+		
+  }
 
+  
+  
 	private void obterMateriasAprovadas() {
 		for (Disciplina disciplia : usuarioLogado.getMateriasCursadas()) {
 			if(disciplia.getResultado().equals(ResultadoEnum.Aprovado) || disciplia.getResultado().equals(ResultadoEnum.DispensaUFBA) || disciplia.getResultado().equals(ResultadoEnum.Dispensado)){
@@ -170,14 +184,15 @@ public class LoginController implements Serializable {
 
 					fluxoGramaFaltantes.remove(disciplina);				
 					
-				// Não é porque disciplina faltante tem mesma natureza de de uma matéria aprovada que devemos que devemos retirar ela de disciplina faltantes
-				}else if (disciplina.getCodigo() == null && disciplina.getNatureza().trim().equalsIgnoreCase(materia.getNatureza().trim())){
-					fluxoGramaFaltantes.remove(disciplina);
+					// Não é porque disciplina faltante tem mesma natureza de de uma matéria aprovada que devemos que devemos retirar ela de disciplina faltantes
 				}
+					//				else if (disciplina.getCodigo() == null && disciplina.getNatureza().trim().equalsIgnoreCase(materia.getNatureza().trim())){
+					//					fluxoGramaFaltantes.remove(disciplina);
+					//				}
 				
-				//				else if (disciplina.getCodigo() == null && disciplina.getNatureza().equals(materia.getNatureza())){
-				//					fluxoGramaFaltantes.remove(disciplina);
-				//				}
+					//				else if (disciplina.getCodigo() == null && disciplina.getNatureza().equals(materia.getNatureza())){
+					//					fluxoGramaFaltantes.remove(disciplina);
+					//				}
 			}
 		}
 		fluxogramaFaltante.getFluxogramaSI().clear();
@@ -185,7 +200,7 @@ public class LoginController implements Serializable {
 	}
     
 
-    private void carregarNotasEmFluxograma(Fluxograma fluxograma) {
+    private Fluxograma carregarNotasEmFluxograma(Fluxograma fluxograma) {
 		for (Disciplina materia : usuarioLogado.getMateriasAprovadas()){
 			for (Disciplina disciplina : fluxograma.getFluxogramaSI()) {
 				if(disciplina.getCodigo() != null && disciplina.getCodigo().equals(materia.getCodigo())){
@@ -196,6 +211,7 @@ public class LoginController implements Serializable {
 				}
 			}
 		}
+		return fluxograma;
 	}
 
 	
@@ -247,17 +263,17 @@ public class LoginController implements Serializable {
 	public String listaDiscipliasSugeridas() {
 			
 
-		// Se o alunos tem diciplinas aprovadas, entao será removido do fluxogramaSI para aplicar a busca gulosa 
-		// somente nas disciplinas que podem ser sugeridas
-		this.removeAprovadasEmFluxograma(fluxogramaSi);
+//		// Se o alunos tem diciplinas aprovadas, entao será removido do fluxogramaSI para aplicar a busca gulosa 
+//		// somente nas disciplinas que podem ser sugeridas
+//		this.removeAprovadasEmFluxograma(fluxogramaSi);
+//		
+//		
+//		//Chamar a RNA para classificar a criticidade da materia
+//		fluxogramaSi = obterRedeNeural(fluxogramaSi);
 		
-		
-		//Chamar a RNA para classificar a criticidade da materia
-		fluxogramaSi = obterRedeNeural(fluxogramaSi);
-		
-		// Adiciona as disciplinas ordenado por prioridade na lista de disciplinas sugeridas.
-		for(; fluxogramaSi != null && fluxogramaSi.getFluxogramaSI().size() > 0 ;)
-			fluxogramaSi = this.buscaGulosa(fluxogramaSi);
+	//		// Adiciona as disciplinas ordenado por prioridade na lista de disciplinas sugeridas.
+	//		for(; fluxogramaSi != null && fluxogramaSi.getFluxogramaSI().size() > 0 ;)
+	//			fluxogramaSi = this.buscaGulosa(fluxogramaSi);
 
 	//		// Se o alunos tem diciplinas aprovadas, entao será removido do fluxogramaSI para aplicar a busca gulosa 
 	//		// somente nas disciplinas que podem ser sugeridas
@@ -273,7 +289,10 @@ public class LoginController implements Serializable {
 		return "disciplinaSugeridaList.xhtml";
 	}
 
-
+	public String listaDiscipliasDetalhada() {
+		
+		return "disciplinaSugeridaDetalhadaList.xhtml";
+	}
 
 	
 	private Fluxograma obterRedeNeural(Fluxograma fluxograma){
@@ -494,11 +513,16 @@ public class LoginController implements Serializable {
 	
 
 	private List<Semestre> montarSemestres(ArrayList<Disciplina> disciplinaList, Integer numDisciplinaPorSemestre) {
-		
+		Integer contDisciplinas = numDisciplinaPorSemestre;
 		ArrayList<Disciplina> disciplinaFaltanteList = new ArrayList<Disciplina>();
+		sequenciaMaiorList = new ArrayList<Disciplina>();
+		semestre = new Semestre();
+
 		disciplinaFaltanteList.addAll(disciplinaList);
 		disciplina = disciplinaList.get(0);
-		Integer minSemetres = obterTamanhoArvore(disciplina);		
+		Integer minSemetres = obterTamanhoArvore(disciplina);
+
+		
 		ArrayList<Disciplina> sequenciaMaiorFaltanteList = new ArrayList<Disciplina>(); // controle do semestre
 		sequenciaMaiorFaltanteList.addAll(sequenciaMaiorList);
 		
@@ -509,37 +533,50 @@ public class LoginController implements Serializable {
 		}
 		
 		
-		for (int sem = 1; disciplinaFaltanteList.size() > 0 && sequenciaMaiorFaltanteList.size() > 0 ; sem++ ) {
-						
-			this.semestre.getDisciplinaList().add(this.sequenciaMaiorList.get(0));  // inserio a primeira da maior sequencia
-			sequenciaMaiorFaltanteList.remove(this.sequenciaMaiorList.get(0)); //controle 
+		for (int sem = 1; disciplinaFaltanteList.size() > 0 || sequenciaMaiorFaltanteList.size() > 0 ; sem++ ) {
+			
+			if(sequenciaMaiorFaltanteList.size() > 0){
+				numDisciplinaPorSemestre = contDisciplinas - 1;
+				
+				this.semestre.getDisciplinaList().add(this.sequenciaMaiorList.get(sem-1));  // inserio a primeira da maior sequencia
+				sequenciaMaiorFaltanteList.remove(this.sequenciaMaiorList.get(sem-1)); //controle 				
+			}
+			
+			
+			if(sequenciaMaiorFaltanteList.size() == 0 && disciplinaFaltanteList.size() > 0 )	numDisciplinaPorSemestre = contDisciplinas;
 			
 			this.semestre.setNome(""+sem);
-			for (int i = 0;  i < numDisciplinaPorSemestre-1 && disciplinaFaltanteList.size() > 0  ; i++) {
-				disciplina = disciplinaList.get(i);
+			for (int i = 0;  i < numDisciplinaPorSemestre && disciplinaFaltanteList.size() > 0  ; i++) {
+				disciplina = disciplinaFaltanteList.get(0);
 				
 				this.semestre.getDisciplinaList().add(disciplina);
 				disciplinaFaltanteList.remove(disciplina);
 				
 			}
 			this.semestreList.add(this.semestre);
-			disciplinaList.clear();
+			//disciplinaList.clear();
 			semestre = new Semestre();
-			disciplinaList.addAll(disciplinaFaltanteList); //atualiza as discplinas faltantes do laço
+			//disciplinaList.addAll(disciplinaFaltanteList); //atualiza as discplinas faltantes do laço
 		}
 		
 		return this.semestreList;
 	}
 
+	
+	
 	/**
 	 * Será necessário incluir os obj de pre-requisitos
 	 * 
 	 * @param disciplina
 	 * @return
 	 */
+	Integer maiorPeso = -1;
+	Disciplina disciplinaAUX;
 	private Integer obterTamanhoArvore(Disciplina disciplina) {
+		
 		// Adiciona a raiz
 		this.sequenciaMaiorList.add(disciplina);
+
 		alturaArvore(disciplina);
 		
 		Integer result = this.sequenciaMaiorList.size(); // ILP abre a maior sequencia de 6 disciplinas encadeadas
@@ -547,11 +584,24 @@ public class LoginController implements Serializable {
 	}
 	
     private void alturaArvore(Disciplina disciplinaParan) {
-        for (Disciplina disciplina : disciplinaParan.getPreRequisitosList()) {
+        for (Disciplina disciplina : disciplinaParan.getLiberaList()) {
             
-            this.sequenciaMaiorList.add(disciplina);
-        	alturaArvore(disciplina);
+        	if(maiorPeso < disciplina.getPeso()){
+        		maiorPeso = disciplina.getPeso();
+        		disciplinaAUX = disciplina;
+        	}        	
         }
+        
+
+        if(disciplinaAUX.getLiberaList().size() > 0){
+        	this.sequenciaMaiorList.add(disciplinaAUX);
+            maiorPeso = -1;
+            alturaArvore(disciplinaAUX);
+        }else{
+        	this.sequenciaMaiorList.add(disciplinaAUX);
+        }
+        
+
     }
 	
 	
@@ -568,14 +618,37 @@ public class LoginController implements Serializable {
 	 */
 	public void localizar() throws Exception {
 		
+		//Carregar lista de Aprovadas.
+		obterMateriasAprovadas();
+		
+		//Criar Lista de Pre Requisito
+		ArrayList<Disciplina> disciplinasPopuladas = fluxogramaOriginal.popularListaRequesitos(fluxogramaOriginal.getFluxogramaSI());
+		
+		//Criar Lista de Materias Liberadas
+		disciplinasPopuladas = fluxogramaOriginal.popularListaMateriasLiberadas(disciplinasPopuladas);
+		
+		Fluxograma fluxogramaPopulado = fluxogramaOriginal;
+		fluxogramaPopulado.setFluxogramaSI(disciplinasPopuladas);
+		
+		carregarNotasEmFluxograma(fluxogramaPopulado);
+		
+		fluxogramaSi.getFluxogramaSI().clear();
+		fluxogramaSi.getFluxogramaSI().addAll(disciplinasPopuladas);
+		
+		
 		// Se o alunos tem diciplinas aprovadas, entao será removido do fluxogramaSI para aplicar a busca gulosa 
 		// somente nas disciplinas que podem ser sugeridas
 		this.removeAprovadasEmFluxograma(fluxogramaSi);
 		
+		
+		//Chamar a RNA para classificar a criticidade da materia
+		fluxogramaSi = obterRedeNeural(fluxogramaSi);
+
+		
 		// Adiciona as disciplinas ordenado por prioridade na lista de disciplinas sugeridas.
 		for(; fluxogramaSi != null && fluxogramaSi.getFluxogramaSI().size() > 0 ;)
 			fluxogramaSi = this.buscaGulosa(fluxogramaSi);
-		
+				
 		this.rederize = true;
 		
 		if (this.qtdDesejada.isEmpty() == false || this.qtdDesejada.length() > 0 ) {

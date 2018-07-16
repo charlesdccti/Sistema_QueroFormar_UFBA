@@ -15,7 +15,7 @@ public class Semestre {
 	
 	
 	public Semestre(){
-
+		disciplinaList = new ArrayList<Disciplina>();
 	}
 	
 	public Semestre(String nome) {

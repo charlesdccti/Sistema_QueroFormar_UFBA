@@ -29,6 +29,9 @@ public class TreeManagedBean {
 	private Disciplina disciplina = new Disciplina();
 	
 	private Disciplina disciplinaSelecionada = new Disciplina();
+	
+	private ArrayList<Disciplina> disciplinaList = new ArrayList<Disciplina>();
+	private Fluxograma fluxograma = new Fluxograma();
 
 	public TreeManagedBean(){
 		/*
@@ -63,10 +66,16 @@ public class TreeManagedBean {
 //		TreeNode videos = new DefaultTreeNode("Videos", this.root);
 //		// Create video node
 //		TreeNode video01 = new DefaultTreeNode("video","Play.avi", videos);
+		//disciplinaList = fluxograma.getFluxogramaSI();
 	}
 	
+//  public void popularListas() {
+//		
+//		disciplinaList = fluxograma.popularListaRequesitos(disciplinaList);
+//		disciplinaList = fluxograma.popularListaMateriasLiberadas(disciplinaList);
+//  }
 	
-	public String getabrirArvore() {
+	public String abrirArvore() {
 		//this.nomeOriginal = this.usuarioSelecionado.getNome();
 		//RequestContext.getCurrentInstance().execute("PF('editPanel').show()");
 		
@@ -76,14 +85,16 @@ public class TreeManagedBean {
     public void consultar() {
     	
         this.root = new DefaultTreeNode(this.disciplinaSelecionada.getNome(), null);
-         
+        this.root.setExpanded(true);
+        
         adicionarNos(this.disciplinaSelecionada.getPreRequisitosList(), this.root);
     }
      
     private void adicionarNos(ArrayList<Disciplina> disciplinaList, TreeNode pai) {
         for (Disciplina disciplina : disciplinaList) {
             TreeNode no = new DefaultTreeNode(disciplina.getNome(), pai);
-             
+            no.setExpanded(true);
+            
             adicionarNos(disciplina.getPreRequisitosList(), no);
         }
     }
