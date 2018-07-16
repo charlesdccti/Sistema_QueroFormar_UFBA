@@ -23,7 +23,7 @@ public class RedeNeural {
 		while ((Math.abs(erro) > 0.05) && (epocas < 100000)) {
 			
 			for (int i = 0; i < conjuntoTreinamento[0].length; i++) {
-				double[] entradaSegundaCamada = propagarSinalPelaPrimeiraCamada(conjuntoTreinamento, i);
+				double[] entradaSegundaCamada = saidaPrimeiraCamada(conjuntoTreinamento, i);
 				double valorSaida = propagarSinalPelaSegundaCamada(entradaSegundaCamada);
 				erro = calcularErro(valoresEsperados, valorSaida, i);
 				double gradiente = calcularGradiente(valorSaida, erro);
@@ -51,7 +51,7 @@ public class RedeNeural {
 		retropropagarErroPelaPrimeiraCamada(conjuntoTreinamento, entradaSegundaCamada, gradiente, i);
 	}
 
-	private double[] propagarSinalPelaPrimeiraCamada(double[][] conjuntoTreinamento, int i) {
+	private double[] saidaPrimeiraCamada(double[][] conjuntoTreinamento, int i) {
 		double[] saidasPrimeiraCamada = getSaidaTreinamentoPrimeiraCamada(conjuntoTreinamento, i);
 		return getEntradasSegundaCamada(saidasPrimeiraCamada);
 	}

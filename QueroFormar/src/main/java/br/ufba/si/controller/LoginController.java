@@ -254,7 +254,6 @@ public class LoginController implements Serializable {
 			fluxogramaSi = this.buscaGulosa(fluxogramaSi);
 		
 		
-		
 		return "disciplinaSugeridaList.xhtml";
 	}
 
@@ -459,7 +458,6 @@ public class LoginController implements Serializable {
 		for (Disciplina disciplina : sequenciaMaiorList) {
 			
 			disciplinaFaltanteList.remove(disciplina);	// remover maior cadeia de faltante	
-			System.out.println(disciplina.getNome());
 		}
 		
 		
@@ -470,10 +468,9 @@ public class LoginController implements Serializable {
 				
 				this.semestre.getDisciplinaList().add(this.sequenciaMaiorList.get(sem-1));  // inserio a primeira da maior sequencia
 				sequenciaMaiorFaltanteList.remove(this.sequenciaMaiorList.get(sem-1)); //controle 				
-			}
-			
-			
-			if(sequenciaMaiorFaltanteList.size() == 0 && disciplinaFaltanteList.size() > 0 )	numDisciplinaPorSemestre = contDisciplinas;
+			}else
+				if(sequenciaMaiorFaltanteList.size() == 0 && disciplinaFaltanteList.size() > 0 )	
+				numDisciplinaPorSemestre = contDisciplinas;
 			
 			this.semestre.setNome(""+sem);
 			for (int i = 0;  i < numDisciplinaPorSemestre && disciplinaFaltanteList.size() > 0  ; i++) {
@@ -484,9 +481,7 @@ public class LoginController implements Serializable {
 				
 			}
 			this.semestreList.add(this.semestre);
-			//disciplinaList.clear();
 			semestre = new Semestre();
-			//disciplinaList.addAll(disciplinaFaltanteList); //atualiza as discplinas faltantes do laço
 		}
 		
 		return this.semestreList;
@@ -544,36 +539,40 @@ public class LoginController implements Serializable {
 	 */
 	public void localizar() throws Exception {
 		
-		//Carregar lista de Aprovadas.
-		//obterMateriasAprovadas();
+		if(usuarioLogado != null && usuarioLogado.getMateriasAprovadas() == null || usuarioLogado.getMateriasAprovadas().size() == 0)
+			//Carregar lista de Aprovadas.
+			obterMateriasAprovadas();
 		
-		//Criar Lista de Pre Requisito
-		ArrayList<Disciplina> disciplinasPopuladas = fluxogramaOriginal.popularListaRequesitos(fluxogramaOriginal.getFluxogramaSI());
+		if(fluxogramaSi != null && (fluxogramaSi.getFluxogramaSI().size() == 0 || fluxogramaSi.getFluxogramaSI().size() == 45)){
+			//Criar Lista de Pre Requisito
+			ArrayList<Disciplina> disciplinasPopuladas = fluxogramaOriginal.popularListaRequesitos(fluxogramaOriginal.getFluxogramaSI());
+			
+			//Criar Lista de Materias Liberadas
+			disciplinasPopuladas = fluxogramaOriginal.popularListaMateriasLiberadas(disciplinasPopuladas);
+			
+			Fluxograma fluxogramaPopulado = fluxogramaOriginal;
+			fluxogramaPopulado.setFluxogramaSI(disciplinasPopuladas);
+			
+			carregarNotasEmFluxograma(fluxogramaPopulado);
+			
+			fluxogramaSi.getFluxogramaSI().clear();
+			fluxogramaSi.getFluxogramaSI().addAll(disciplinasPopuladas);
+			
+			
+			// Se o alunos tem diciplinas aprovadas, entao será removido do fluxogramaSI para aplicar a busca gulosa 
+			// somente nas disciplinas que podem ser sugeridas
+			this.removeAprovadasEmFluxograma(fluxogramaSi);
+			//Chamar a RNA para classificar a criticidade da materia
+			fluxogramaSi = obterRedeNeural(fluxogramaSi);
+		}
 		
-		//Criar Lista de Materias Liberadas
-		disciplinasPopuladas = fluxogramaOriginal.popularListaMateriasLiberadas(disciplinasPopuladas);
 		
-		Fluxograma fluxogramaPopulado = fluxogramaOriginal;
-		fluxogramaPopulado.setFluxogramaSI(disciplinasPopuladas);
+		if(disciplinaSugeridaList == null || disciplinaSugeridaList.size() == 0){
+			// Adiciona as disciplinas ordenado por prioridade na lista de disciplinas sugeridas.
+			for(; fluxogramaSi != null && fluxogramaSi.getFluxogramaSI().size() > 0 ;)
+				fluxogramaSi = this.buscaGulosa(fluxogramaSi);
+		}	
 		
-		carregarNotasEmFluxograma(fluxogramaPopulado);
-		
-		fluxogramaSi.getFluxogramaSI().clear();
-		fluxogramaSi.getFluxogramaSI().addAll(disciplinasPopuladas);
-		
-		
-		// Se o alunos tem diciplinas aprovadas, entao será removido do fluxogramaSI para aplicar a busca gulosa 
-		// somente nas disciplinas que podem ser sugeridas
-		this.removeAprovadasEmFluxograma(fluxogramaSi);
-		
-		
-		//Chamar a RNA para classificar a criticidade da materia
-		fluxogramaSi = obterRedeNeural(fluxogramaSi);
-
-		
-		// Adiciona as disciplinas ordenado por prioridade na lista de disciplinas sugeridas.
-		for(; fluxogramaSi != null && fluxogramaSi.getFluxogramaSI().size() > 0 ;)
-			fluxogramaSi = this.buscaGulosa(fluxogramaSi);
 				
 		this.rederize = true;
 		
