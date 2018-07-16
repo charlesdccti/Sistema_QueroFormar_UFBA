@@ -224,7 +224,7 @@ public class LoginController implements Serializable {
  
 			for (Disciplina materia : fluxograma.getFluxogramaSI()) {
 				if(materia.getPeso()!= null && materia.getPeso() > materiaMaiorPrioridade.getPeso()){
-					//atualiza a matria de maior prioridade
+					//atualiza a materia de maior prioridade
 					materiaMaiorPrioridade = materia;
 				}	
 
@@ -564,39 +564,34 @@ public class LoginController implements Serializable {
 
 	
 	
-	/**
-	 * Será necessário incluir os obj de pre-requisitos
+	/**	
+	 * Escolhe as disciplinas que fazem parte da sequência de maior cadeia formada por disciplinas Liberadas( sequenciaMaiorList )
 	 * 
 	 * @param disciplina
-	 * @return
+	 * @return result
 	 */
 	Integer maiorPeso = -1;
 	Disciplina disciplinaAUX;
-	private Integer obterTamanhoArvore(Disciplina disciplina) {
-		
+	private Integer obterTamanhoArvore(Disciplina disciplina) {		
 		// Adiciona a raiz
 		this.sequenciaMaiorList.add(disciplina);
-
-		alturaArvore(disciplina);
-		
+		alturaArvoreGuloso(disciplina);	
 		Integer result = this.sequenciaMaiorList.size(); // ILP abre a maior sequencia de 6 disciplinas encadeadas
 		return result;		
 	}
 	
-    private void alturaArvore(Disciplina disciplinaParan) {
-        for (Disciplina disciplina : disciplinaParan.getLiberaList()) {
-            
+    private void alturaArvoreGuloso(Disciplina disciplinaParan) {
+        for (Disciplina disciplina : disciplinaParan.getLiberaList()) {            
         	if(maiorPeso < disciplina.getPeso()){
         		maiorPeso = disciplina.getPeso();
         		disciplinaAUX = disciplina;
         	}        	
         }
         
-
         if(disciplinaAUX.getLiberaList().size() > 0){
         	this.sequenciaMaiorList.add(disciplinaAUX);
             maiorPeso = -1;
-            alturaArvore(disciplinaAUX);
+            alturaArvoreGuloso(disciplinaAUX);
         }else{
         	this.sequenciaMaiorList.add(disciplinaAUX);
         }
