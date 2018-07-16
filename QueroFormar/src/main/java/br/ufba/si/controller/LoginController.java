@@ -82,41 +82,41 @@ public class LoginController implements Serializable {
     }
 
     public String logIn() {
-				//       	usuarioLogado.setLogin(cpf);
-				//    	usuarioLogado.setSenha(senha); 	
-				//    	boolean autenticou = true;
+				       	usuarioLogado.setLogin(cpf);
+				    	usuarioLogado.setSenha(senha); 	
+				    	boolean autenticou = true;
 				    	
-				//    	AutenticarSiac siac = new AutenticarSiac();
-				//    	
-				//
-				//    	try {
-				//    		if(!"Visao".equalsIgnoreCase(cpf)){
-				//    			autenticou = siac.login("https://siac.ufba.br/SiacWWW/LogonSubmit.do",cpf, senha);
-				//    		}
-				//    		
-				//		
-				//			if (autenticou) {
-				//				if(!"Visao".equalsIgnoreCase(cpf)){
-				//					// Acessa página dos componetes curriculares
-				//					siac.openPage("https://siac.ufba.br/SiacWWW/ConsultarComponentesCurricularesCursados.do", usuarioLogado);
-				//				}
+				    	AutenticarSiac siac = new AutenticarSiac();
+				    	
+				
+				    	try {
+				    		if(!"Visao".equalsIgnoreCase(cpf)){
+				    			autenticou = siac.login("https://siac.ufba.br/SiacWWW/LogonSubmit.do",cpf, senha);
+				    		}
+				    		
+						
+							if (autenticou) {
+								if(!"Visao".equalsIgnoreCase(cpf)){
+									// Acessa página dos componetes curriculares
+									siac.openPage("https://siac.ufba.br/SiacWWW/ConsultarComponentesCurricularesCursados.do", usuarioLogado);
+								}
 
-//				//Carregar lista de Aprovadas.
-//				obterMateriasAprovadas();
-//				
-//				//Criar Lista de Pre Requisito
-//				ArrayList<Disciplina> disciplinasPopuladas = fluxogramaOriginal.popularListaRequesitos(fluxogramaOriginal.getFluxogramaSI());
-//				
-//				//Criar Lista de Materias Liberadas
-//				disciplinasPopuladas = fluxogramaOriginal.popularListaMateriasLiberadas(disciplinasPopuladas);
-//				
-//				Fluxograma fluxogramaPopulado = fluxogramaOriginal;
-//				fluxogramaPopulado.setFluxogramaSI(disciplinasPopuladas);
-//				
-//				carregarNotasEmFluxograma(fluxogramaPopulado);
-//				
-//				fluxogramaSi.getFluxogramaSI().clear();
-//				fluxogramaSi.getFluxogramaSI().addAll(disciplinasPopuladas);
+				//Carregar lista de Aprovadas.
+				obterMateriasAprovadas();
+				
+				//Criar Lista de Pre Requisito
+				ArrayList<Disciplina> disciplinasPopuladas = fluxogramaOriginal.popularListaRequesitos(fluxogramaOriginal.getFluxogramaSI());
+				
+				//Criar Lista de Materias Liberadas
+				disciplinasPopuladas = fluxogramaOriginal.popularListaMateriasLiberadas(disciplinasPopuladas);
+				
+				Fluxograma fluxogramaPopulado = fluxogramaOriginal;
+				fluxogramaPopulado.setFluxogramaSI(disciplinasPopuladas);
+				
+				carregarNotasEmFluxograma(fluxogramaPopulado);
+				
+				fluxogramaSi.getFluxogramaSI().clear();
+				fluxogramaSi.getFluxogramaSI().addAll(disciplinasPopuladas);
 				
 				// Se o alunos tem diciplinas aprovadas, entao será removido do fluxogramaSI para aplicar a busca gulosa 
 
@@ -135,17 +135,17 @@ public class LoginController implements Serializable {
 				//"/inicio?faces-redirect=false";
 				return "/inicio.xhtml";
 				
-//	        }else {       
-//	            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "CPF ou Senha Inválidos", "Login Inválido"));
-//	            return null;
-//	            
-//	        }   	
-//    	} catch (UnsupportedEncodingException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//    	return null;
+	        }else {       
+	            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "CPF ou Senha Inválidos", "Login Inválido"));
+	            return null;
+	            
+	        }   	
+    	} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	return null;
     }
 
     
@@ -263,17 +263,17 @@ public class LoginController implements Serializable {
 	public String listaDiscipliasSugeridas() {
 			
 
-//		// Se o alunos tem diciplinas aprovadas, entao será removido do fluxogramaSI para aplicar a busca gulosa 
-//		// somente nas disciplinas que podem ser sugeridas
-//		this.removeAprovadasEmFluxograma(fluxogramaSi);
-//		
-//		
-//		//Chamar a RNA para classificar a criticidade da materia
-//		fluxogramaSi = obterRedeNeural(fluxogramaSi);
+		// Se o alunos tem diciplinas aprovadas, entao será removido do fluxogramaSI para aplicar a busca gulosa 
+		// somente nas disciplinas que podem ser sugeridas
+		this.removeAprovadasEmFluxograma(fluxogramaSi);
 		
-	//		// Adiciona as disciplinas ordenado por prioridade na lista de disciplinas sugeridas.
-	//		for(; fluxogramaSi != null && fluxogramaSi.getFluxogramaSI().size() > 0 ;)
-	//			fluxogramaSi = this.buscaGulosa(fluxogramaSi);
+		
+		//Chamar a RNA para classificar a criticidade da materia
+		fluxogramaSi = obterRedeNeural(fluxogramaSi);
+		
+		// Adiciona as disciplinas ordenado por prioridade na lista de disciplinas sugeridas.
+		for(; fluxogramaSi != null && fluxogramaSi.getFluxogramaSI().size() > 0 ;)
+			fluxogramaSi = this.buscaGulosa(fluxogramaSi);
 
 	//		// Se o alunos tem diciplinas aprovadas, entao será removido do fluxogramaSI para aplicar a busca gulosa 
 	//		// somente nas disciplinas que podem ser sugeridas
