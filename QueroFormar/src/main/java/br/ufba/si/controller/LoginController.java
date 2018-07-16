@@ -358,30 +358,6 @@ public class LoginController implements Serializable {
          
         return results;
     }
-
-
-	
-
-
-	/*
-	 * Componente
-	 */
-//	private List<String> semestreList = new ArrayList<String>();
-//	
-//	public List<String> getSemestreList() {
-//		// Inica componente
-//		this.semestreList.add("1");
-//		this.semestreList.add("2");
-//		this.semestreList.add("3");
-//		this.semestreList.add("4");
-//		this.semestreList.add("5");
-//		
-//		return semestreList;
-//	}
-//
-//	public void setSemestreList(List<String> semestreList) {
-//		this.semestreList = semestreList;
-//	}
 	
 	
 	public String getQtdDesejada() {
@@ -407,36 +383,7 @@ public class LoginController implements Serializable {
 		this.semestre = semestre;
 	}
 
-	public List<Semestre> getSemestreList() {  	
-		//		/*
-		//		 * Teste da arvore
-		//		 */
-		//		Disciplina MATC89 = new Disciplina();
-		//		MATC89.setCodigo("MATC89");
-		//		
-		//		Fluxograma fluxogramaTeste = new Fluxograma();
-		//		
-		//		for (Disciplina disciplina : fluxogramaTeste.getFluxogramaSI()) {
-		//			if(disciplina.getCodigo() != null && disciplina.getCodigo().equals(MATC89.getCodigo())){
-		//				
-		//				semestre.setNome("1");
-		//				semestre.getDisciplinaList().add(disciplina);
-		//				this.semestreList.add(semestre);
-		//				
-		//				semestre = new Semestre();
-		//				semestre.setNome("2");
-		//				semestre.getDisciplinaList().add(disciplina);
-		//				this.semestreList.add(semestre);
-		//				
-		//			}
-		//	
-		//		}
-		
-		// rescupera da sessao 
-		//this.qtdDesejada = (String)LoginController.getFilter().get(usuarioLogado.getMatricula());
-
-
-		
+	public List<Semestre> getSemestreList() {  			
 		return semestreList;
 	}
 	
@@ -538,6 +485,8 @@ public class LoginController implements Serializable {
 	 * Tela de consulta
 	 */
 	public void localizar() throws Exception {
+		
+		semestreList = new ArrayList<Semestre>();
 		
 		if(usuarioLogado != null && usuarioLogado.getMateriasAprovadas() == null || usuarioLogado.getMateriasAprovadas().size() == 0)
 			//Carregar lista de Aprovadas.
