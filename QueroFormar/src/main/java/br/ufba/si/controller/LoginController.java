@@ -51,13 +51,11 @@ public class LoginController implements Serializable {
     
     
     private static double TREINO[][] = {
-    		{2, 1, 4, 2, 1, 0, 3, 1, 2, 0, 1, 1},
-    		{6, 5, 4, 3, 2, 1, 6, 2, 5, 1, 3, 4},
-       		
-    		{0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5} //bÃ­as
+    		{1, 2, 3, 4, 5, 6},//Y
+			{0, 1, 1, 5, 1, 3}//X
     };
-         
-    private static double ESPERADOS[] = {0.17, 0.33, 0.5, 0.67, 0.83, 1.0, 0.17, 0.83, 0.33, 1.0, 0.67, 0.5};
+    
+    private static double ESPERADOS[] = {2.0, 3.0, 4.0, 5.0, 6.0, 7.0};
     
     
     public LoginController() {
@@ -134,8 +132,6 @@ public class LoginController implements Serializable {
 	  fluxogramaOriginal.setFluxogramaSI(disciplinaList);
 		
   }
-
-  
   
 	private void obterMateriasAprovadas() {
 		for (Disciplina disciplia : usuarioLogado.getMateriasCursadas()) {
@@ -248,6 +244,7 @@ public class LoginController implements Serializable {
 		
 		//Chamar a RNA para classificar a criticidade da materia
 		fluxogramaSi = obterRedeNeural(fluxogramaSi);
+				
 		
 		//Tirar acuracia da RNA
 		double curacia = 0.00;
@@ -286,15 +283,14 @@ public class LoginController implements Serializable {
  	}
 
 	private void executorRNA(Fluxograma fluxograma){
-		double[] classificar = new double[3];
+		double[] classificar = new double[2];
 		
-		RedeNeural rede = new RedeNeural(5, 3);
-		rede.treino(TREINO, ESPERADOS);
+		RedeNeural rede = new RedeNeural();
+		rede.treinar(TREINO, ESPERADOS);
 		
 		for (Disciplina disciplina : fluxograma.getFluxogramaSI()) {
-			classificar[0] =  disciplina.getLiberaList().size(); //X
-			classificar[1] =  disciplina.getPeso(); //Y
- 			classificar[2] = 1; //bais
+			classificar[0] =  disciplina.getPeso(); //Y
+			classificar[1] =  disciplina.getLiberaList().size(); //X
 			
 			disciplina.setCategoria(rede.classificar(classificar));
 					
@@ -311,18 +307,19 @@ public class LoginController implements Serializable {
 	
 	private int contarAcertos(Disciplina disciplina){
 		String line = disciplina.getCategoria();
-		int inicio = disciplina.getCategoria().length() - 1;
-		int valor = Integer.parseInt(line.substring(inicio, disciplina.getCategoria().length()));
-		
-		if(disciplina.getPeso().equals(descategorizar(valor))){
-			return 1;
-		}else{
-			return 0;
+		if(!"Não Classificado".equalsIgnoreCase(line)){
+			int inicio = disciplina.getCategoria().length() - 1;
+			int valor = Integer.parseInt(line.substring(inicio, disciplina.getCategoria().length()));
+			
+			if(disciplina.getPeso().equals(descategorizar(valor))){
+				return 1;
+			}else{
+				return 0;
+			}
 		}
-		
-		
+		return 0;
 	}
-
+	
 	private int descategorizar(int valor) {
 		switch (valor) {
 			case 1:
@@ -523,15 +520,10 @@ public class LoginController implements Serializable {
         
 
     }
-	
-	
 
 	public void setSemestreList(List<Semestre> semestreList) {
 		this.semestreList = semestreList;
 	}
-	
-	
-
 	
 	/*
 	 * Tela de consulta
@@ -626,5 +618,23 @@ public class LoginController implements Serializable {
 
 	public void setFluxogramaOriginal(Fluxograma fluxogramaOriginal) {
 		this.fluxogramaOriginal = fluxogramaOriginal;
+	}
+	
+	public String categorizar(Integer valor) {
+		
+		if(valor ==  6){
+			return "Categoria 01";
+		}else if(valor == 5){
+			return "Categoria 02";
+		}else if(valor == 4){
+			return "Categoria 03";
+		}else if(valor == 3){
+			return "Categoria 04";
+		}else if(valor == 2){
+			return "Categoria 05";
+		}else{
+			return "Categoria 06";
+		}
+		
 	}
 }
