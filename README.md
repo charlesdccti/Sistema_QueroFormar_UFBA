@@ -1,11 +1,10 @@
 # Sistema_QueroFormar_UFBA
-Projeto para disciplina de Inteligência Artificial 2018.1
 
 ### Técnicas de Inteligência Artificial Implementadas:
 - Algoritmos de Busca Gulosa
 - Redes Neurais Artificias 
 
-## Apresentação
+## Projeto para disciplina de Inteligência Artificial 2018.1
 
 1. [Slides da Apresetação do QueroFormar](slides.pdf)
 
